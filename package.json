@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "tsx watch src/server.ts",
-    "start:prd": "node build/server.js"
+    "start:prd": "node build/server.js",
+    "tsup": "tsup src --out-dir build"
   },
   "keywords": [],
   "author": "",
@@ -41,7 +42,7 @@
     "@types/nodemailer": "^6.4.16",
     "eslint": "9.10.0",
     "prisma": "5.19.1",
-    "tsup": "8.2.4",
+    "tsup": "^8.2.4",
     "tsx": "4.19.0",
     "typescript": "5.6.2"
   }
