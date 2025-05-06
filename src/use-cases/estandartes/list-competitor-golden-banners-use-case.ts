@@ -1,4 +1,4 @@
-import { GoldenBannersRepository } from "@/repositories/golden-banners-repository"
+import { Estandarte, GoldenBannersRepository } from "@/repositories/golden-banners-repository"
 import { GoldenBanner } from "@prisma/client"
 
 interface ListCompetitorGoldenBannersUseCaseRequest{
@@ -6,7 +6,7 @@ interface ListCompetitorGoldenBannersUseCaseRequest{
 }
 
 interface ListCompetitorGoldenBannersUseCaseResponse{
-    estandartes: GoldenBanner[]
+    estandartes: Estandarte[]
 }
 
 

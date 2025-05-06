@@ -1,32 +1,82 @@
 import { GoldenBanner } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { GoldenBannersRepository } from "../golden-banners-repository";
+import { Estandarte, GoldenBannersRepository } from "../golden-banners-repository";
 
 export class PrismaGoldenBannersRepository implements GoldenBannersRepository{
-    async findByEvent(event_id: string): Promise<GoldenBanner[]> {
+    async findByEvent(event_id: string): Promise<Estandarte[]> {
         const res = await prisma.event.findFirst({
             where:{
                 id: event_id
             },
             include:{
-                estandartes: true
-            }
+                estandartes: {
+                    include:{
+                        bannerType:{
+                            select:{
+                                name:true,
+                                id:true,
+                                description: true
+                            }
+                        },
+                        event: {
+                            select:{
+                                name: true,
+                                id:true,
+                                banner:true
+                            }
+                        }
+                    }
+                },
+            },
+
         })
 
         if(!res){
             return []
         }
+        
+        const estandartes = res.estandartes.map((est) => {
+            return {
+                event:{
+                    id: est.eventId,
+                    name: est.event.name,
+                    banner: est.event.banner
+                },
+                banner:{
+                    id: est.bannerTypeId,
+                    name: est.bannerType.name,
+                    description: est.bannerType.description
+                }
+            }
+        })
 
-        return res.estandartes
+        return estandartes
     }
 
-    async findByCompetitor(competitor_id: string): Promise<GoldenBanner[]> {
+    async findByCompetitor(competitor_id: string): Promise<Estandarte[]> {
         const res = await prisma.competitor.findFirst({
             where:{
                 id: competitor_id
             },
             include:{
-                estandartes: true
+                estandartes: {
+                    include:{
+                        bannerType:{
+                            select:{
+                                name:true,
+                                id:true,
+                                description: true
+                            }
+                        },
+                        event: {
+                            select:{
+                                name: true,
+                                id:true,
+                                banner:true
+                            }
+                        }
+                    }
+                },
             }
         })
 
@@ -34,7 +84,22 @@ export class PrismaGoldenBannersRepository implements GoldenBannersRepository{
             return []
         }
 
-        return res.estandartes
+        const estandartes = res.estandartes.map((est) => {
+            return {
+                event:{
+                    id: est.eventId,
+                    name: est.event.name,
+                    banner: est.event.banner
+                },
+                banner:{
+                    id: est.bannerTypeId,
+                    name: est.bannerType.name,
+                    description: est.bannerType.description
+                }
+            }
+        })
+
+        return estandartes
     }
 
  
