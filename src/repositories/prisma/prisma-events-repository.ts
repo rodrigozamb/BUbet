@@ -7,9 +7,6 @@ export class PrismaEventsRepository implements EventsRepository{
     async listActiveEvents(): Promise<Event[]> {
         return await prisma.event.findMany({
             where:{
-                ends_at:{
-                    gte: new Date()
-                }
             },
             orderBy:{
                 starts_at:'asc'
