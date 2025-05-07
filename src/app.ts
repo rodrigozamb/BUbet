@@ -12,6 +12,7 @@ import { resultsRoutes } from "./controllers/results/routes";
 // import multer from 'fastify-multer'
 import fastifyMultipart from "@fastify/multipart";
 import { judgesRoutes } from "./controllers/judges/routes";
+import { feedbacksRoutes } from "./controllers/feedbacks/routes";
 
 require('aws-sdk/lib/maintenance_mode_message').suppress = true;
 export const app = fastify()
@@ -46,7 +47,7 @@ app.register(eventRoutes)
 app.register(betsRoutes)
 app.register(resultsRoutes)
 app.register(judgesRoutes)
-
+app.register(feedbacksRoutes)
 app.setErrorHandler((error, _, res)=>{
 
     if (error instanceof ZodError){
