@@ -139,6 +139,8 @@ model Feedback {
   id      String @id @default(uuid())
   userId  String
   content String
+  verified Boolean @default(false)
+  image String?
 
   created_at DateTime @default(now())
   user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
