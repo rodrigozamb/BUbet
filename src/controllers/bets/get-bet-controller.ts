@@ -17,5 +17,5 @@ export async function getBet(req: FastifyRequest, res: FastifyReply){
         user_id: req.user.sub
     })
 
-    return res.status(201).send(bet)
+    return res.status(200).send(bet)
 }

@@ -22,6 +22,7 @@ model User {
   id            String     @id @default(uuid())
   name          String
   username      String
+  position      Int        @default(0)
   profile_url   String?
   email         String     @unique
   role          Role       @default(USER)
@@ -38,17 +39,19 @@ model Event {
   id          String   @id @default(uuid())
   name        String
   description String
+  local       String   @default("Não Definido")
   date        DateTime
   banner      String
   starts_at   DateTime
   ends_at     DateTime
   created_at  DateTime @default(now())
 
-  competitors  Competitor[]
-  eventResults EventResults[]
-  bets         Bets[]
-  judges       Judge[]
-  estandartes  GoldenBanner[]
+  competitors        Competitor[]
+  eventResults       EventResults[]
+  bets               Bets[]
+  judges             Judge[]
+  estandartes        GoldenBanner[]
+  event_banner_types BannerType[]
 
   @@map("events")
 }
@@ -119,6 +122,8 @@ model BannerType {
 
   goldenBanner GoldenBanner[]
 
+  events Event[]
+
   @@map("banner_types")
 }
 
@@ -136,14 +141,14 @@ model GoldenBanner {
 }
 
 model Feedback {
-  id      String @id @default(uuid())
-  userId  String
-  content String
+  id       String  @id @default(uuid())
+  userId   String
+  content  String
   verified Boolean @default(false)
-  image String?
+  image    String?
 
   created_at DateTime @default(now())
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
   @@map("feedbacks")
 }

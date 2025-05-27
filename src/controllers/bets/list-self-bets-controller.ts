@@ -1,17 +1,11 @@
 import { makelistUserBetsUseCase } from "@/use-cases/factories/make-list-user-bets-use-case";
 import { FastifyReply, FastifyRequest } from "fastify";
-import { z } from "zod";
 
-export async function listUserBets(req: FastifyRequest, res: FastifyReply){
+export async function listSelfBets(req: FastifyRequest, res: FastifyReply){
     
-    const getBetParamSchema = z.object({
-        user_id: z.string().uuid(),
-    })
-
-    const { user_id } = getBetParamSchema.parse(req.params)
     const listBetsUseCase = makelistUserBetsUseCase()
     const { bets } = await listBetsUseCase.execute({
-        user_id: user_id
+        user_id: req.user.sub
     })
 
     return res.status(200).send(bets)

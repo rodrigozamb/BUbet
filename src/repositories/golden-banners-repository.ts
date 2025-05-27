@@ -1,4 +1,4 @@
-import { GoldenBanner } from "@prisma/client";
+import { GoldenBanner, Prisma } from "@prisma/client";
 
 export interface Estandarte{
     event:{
@@ -17,4 +17,5 @@ export interface Estandarte{
 export interface GoldenBannersRepository{
     findByEvent(event_id: string): Promise<Estandarte[]>
     findByCompetitor(competitor_id: string): Promise<Estandarte[]>
+    createGoldenBannersBet(data: Prisma.GoldenBannerCreateManyInput[] ):Promise<boolean>
 }

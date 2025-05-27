@@ -1,4 +1,4 @@
-import { Bets, Competitor, Event, Prisma, User } from "@prisma/client";
+import { BannerType, Bets, Competitor, Event, GoldenBanner, Prisma, User } from "@prisma/client";
 import { EventsRepository } from "../events-repository";
 import { prisma } from "@/lib/prisma";
 
@@ -100,7 +100,19 @@ export class PrismaEventsRepository implements EventsRepository{
                 id: event_id
             },
             include:{
-                bets:true
+                bets:{
+                    include:{
+                        user:{
+                            select:{
+                                name:true,
+                                profile_url:true,
+                                username: true,
+                                id: true
+                            }
+                        }
+                    }
+                }
+                
             }
         }) 
 
@@ -111,6 +123,22 @@ export class PrismaEventsRepository implements EventsRepository{
         return res.bets;
     }
     
+    async listEventGoldenBannersTypes(id: string):Promise<BannerType[] | null>{
+
+        const res = await prisma.event.findFirst({
+            where:{id},
+            include:{
+                event_banner_types: true
+            }
+            
+        })
+        if(!res){
+            return null
+        }
+
+        return res.event_banner_types
+    }
+
     async findByName(name: string): Promise<Event | null> {
         return await prisma.event.findFirst({
             where:{name}

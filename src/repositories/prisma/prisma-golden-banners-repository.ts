@@ -1,8 +1,16 @@
-import { GoldenBanner } from "@prisma/client";
+import { GoldenBanner, Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { Estandarte, GoldenBannersRepository } from "../golden-banners-repository";
 
 export class PrismaGoldenBannersRepository implements GoldenBannersRepository{
+
+
+    async createGoldenBannersBet(data: Prisma.GoldenBannerCreateManyInput[]): Promise<boolean> {
+        const res =  await prisma.goldenBanner.createMany({data})
+        console.log(res)
+        return true
+    }
+
     async findByEvent(event_id: string): Promise<Estandarte[]> {
         const res = await prisma.event.findFirst({
             where:{

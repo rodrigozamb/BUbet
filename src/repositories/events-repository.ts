@@ -1,4 +1,4 @@
-import { Prisma, Event, Competitor, Bets, User } from "@prisma/client";
+import { Prisma, Event, Competitor, Bets, User, BannerType } from "@prisma/client";
 
 export interface EventsRepository{
     create(data: Prisma.EventCreateInput):Promise<Event>
@@ -9,5 +9,6 @@ export interface EventsRepository{
     findEventCompetitors(event_id: string):Promise<Competitor[]>
     findEventBets(event_id: string):Promise<Bets[] | null>
     listEventUsersRanking(event_id: string):Promise<Bets[]>
+    listEventGoldenBannersTypes(id: string):Promise<BannerType[] | null>
     listActiveEvents():Promise<Event[]>
 }

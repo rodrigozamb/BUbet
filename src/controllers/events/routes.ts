@@ -12,6 +12,7 @@ import { listEvents } from "./listEventsController"
 import multer from 'fastify-multer'
 import { listEventJudges } from "./listEventJudges"
 import { listEventGoldenBanners } from "./listEventGoldenBanners"
+import { listEventBannersTypes } from "./listEventBannersTypesController"
 
 const storage = multer.memoryStorage(); // Storing the file in memory before uploading to S3
 const upload = multer({ storage });
@@ -27,6 +28,7 @@ export async function eventRoutes (app: FastifyInstance){
     app.get('/events/:eventId/judges',listEventJudges)
     app.get('/events/:event_id/estandartes',listEventGoldenBanners)
     app.get('/events/:eventId/ranking',listEventUsersRanking)
+    app.get('/events/:eventId/estandartes/types',listEventBannersTypes) 
     app.put('/events/:eventId/addCompetitors',{onRequest:[verifyUserRole('ADMIN')]}, addCompetitorToEvent)
     app.put('/events/:eventId/removeCompetitors',{onRequest:[verifyUserRole('ADMIN')]}, removeCompetitorToEvent)
 

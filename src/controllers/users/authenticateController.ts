@@ -20,7 +20,8 @@ export async function authenticate(req: FastifyRequest, res: FastifyReply){
             {
                 role: user.role,
                 name:user.name,
-                profile_url: user.profile_url
+                profile_url: user.profile_url,
+                id: user.id
             },
             {
             sign:{
@@ -32,7 +33,8 @@ export async function authenticate(req: FastifyRequest, res: FastifyReply){
             {
                 role: user.role,
                 name:user.name,
-                profile_url: user.profile_url
+                profile_url: user.profile_url,
+                id: user.id
             },
             {
             sign:{
