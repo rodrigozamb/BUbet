@@ -147,7 +147,10 @@ export class PrismaEventsRepository implements EventsRepository{
 
     async findById(id: string): Promise<Event | null> {
         return await prisma.event.findUnique({
-            where:{id}
+            where:{id},
+            include:{
+                judges:true
+            }
         })
     }
 

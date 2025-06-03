@@ -7,6 +7,9 @@ export class PrismaJudgesRepository implements JudgesRepository{
         return await prisma.judge.findUnique({
             where:{
                 id: judge_id
+            },
+            include:{
+                events: true
             }
         })
     }

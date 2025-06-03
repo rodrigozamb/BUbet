@@ -19,18 +19,19 @@ enum Role {
 }
 
 model User {
-  id            String     @id @default(uuid())
+  id            String         @id @default(uuid())
   name          String
   username      String
-  position      Int        @default(0)
+  position      Int            @default(0)
   profile_url   String?
-  email         String     @unique
-  role          Role       @default(USER)
+  email         String         @unique
+  role          Role           @default(USER)
   password_hash String
-  created_at    DateTime   @default(now())
+  created_at    DateTime       @default(now())
   is_confirmed  DateTime?
   bets          Bets[]
   Feedback      Feedback[]
+  GoldenBanner  GoldenBanner[]
 
   @@map("users")
 }
@@ -87,6 +88,7 @@ model EventResults {
 }
 
 model Bets {
+  id      String   @id @default(uuid())
   userId  String
   eventId String
   bets    String[]
@@ -96,9 +98,10 @@ model Bets {
   user  User  @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   event Event @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  created_at DateTime @default(now())
+  created_at  DateTime       @default(now())
+  estandartes GoldenBanner[]
 
-  @@id(name: "id", [userId, eventId])
+  @@index([userId, eventId])
   @@map("bets")
 }
 
@@ -131,12 +134,16 @@ model GoldenBanner {
   competitorId String
   eventId      String
   bannerTypeId String
+  userId       String
+  betId        String
 
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  bet        Bets       @relation(fields: [betId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   competitor Competitor @relation(fields: [competitorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   event      Event      @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   bannerType BannerType @relation(fields: [bannerTypeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  @@id(name: "id", [competitorId, eventId, bannerTypeId])
+  @@id(name: "id", [competitorId, eventId, bannerTypeId, userId])
   @@map("golden_banners")
 }
 

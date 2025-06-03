@@ -4,14 +4,36 @@ import { BetsRepository } from "../bets-repository";
 
 export class PrismaBetsRepository implements BetsRepository{
     async findByIds( userId: string, eventId: string): Promise<Bets | null> {
-        return await prisma.bets.findUnique({
+        const bet =  await prisma.bets.findFirst({
             where:{
-                id:{
-                    userId: userId,
-                    eventId: eventId
+                AND:[
+                    {
+                        userId
+                    },
+                    {
+                        eventId
+                    }
+                ]
+            },
+            include:{
+                estandartes: {
+                    select:{
+                        competitor:{
+                            select:{
+                                name: true
+                            }
+                        },
+                        bannerType:{
+                            select:{
+                                name:true
+                            }
+                        }
+                    }
                 }
             }
         })
+
+        return bet
         
     }
 

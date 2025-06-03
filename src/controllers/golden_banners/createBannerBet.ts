@@ -5,13 +5,14 @@ import { z } from "zod";
 export async function createBannerBet(req:FastifyRequest, res: FastifyReply){
 
     const createBannerBetBodySchema = z.object({
-        data: z.array(   z.object({ bannerTypeId: z.string().uuid(), competitorId: z.string().uuid() })      ),
+        data: z.array(   z.object({ bannerTypeId: z.string().uuid(), competitorId: z.string().uuid() }))
     })
     const getBetParamSchema = z.object({
         event_id: z.string().uuid(),
+        bet_id: z.string().uuid(),
     })
 
-    const { event_id } = getBetParamSchema.parse(req.params)
+    const { event_id, bet_id } = getBetParamSchema.parse(req.params)
 
     const { data } = createBannerBetBodySchema.parse(req.body)
 
@@ -19,10 +20,12 @@ export async function createBannerBet(req:FastifyRequest, res: FastifyReply){
         return {
             bannerTypeId: bet.bannerTypeId,
             competitorId: bet.competitorId,
-            eventId: event_id
+            eventId: event_id,
+            userId: req.user.sub,
+            betId: bet_id
         }
     })
-
+    console.log(create_data)
     const createBannerBetUseCase = makeCreateBannersBetUseCase()
     const {  } = await createBannerBetUseCase.execute({
         data: create_data

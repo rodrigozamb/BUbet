@@ -7,6 +7,6 @@ export async function goldenBannersRoutes (app: FastifyInstance){
 
     app.addHook('onRequest',verifyJWT)
 
-    app.post('/estandartes/:event_id', createBannerBet)
+    app.post('/estandartes/:event_id/:bet_id', createBannerBet)
         
 }

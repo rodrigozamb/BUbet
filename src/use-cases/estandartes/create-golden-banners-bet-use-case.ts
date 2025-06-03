@@ -6,6 +6,8 @@ interface CreateGoldenBannersBetUseCaseRequest{
         competitorId: string
         eventId: string
         bannerTypeId: string
+        betId: string
+        userId: string
     }[]
 }
 
