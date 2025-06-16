@@ -73,17 +73,18 @@ model Competitor {
 }
 
 model EventResults {
+  id          String @id @default(uuid())
   eventId      String
   competitorId String
   placing      String
   score        Float
+  estandartes  BannerType[]
 
   competitor Competitor @relation(fields: [competitorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   event      Event      @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   created_at DateTime @default(now())
 
-  @@id(name: "id", [competitorId, eventId])
   @@map("events_results")
 }
 
@@ -126,6 +127,8 @@ model BannerType {
   goldenBanner GoldenBanner[]
 
   events Event[]
+
+  resultado EventResults[]
 
   @@map("banner_types")
 }

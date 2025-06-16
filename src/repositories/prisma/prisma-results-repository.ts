@@ -84,12 +84,13 @@ export class PrismaEventResultsRepository implements EventsResultsRepository{
         bets.forEach(async (bet)=>{
             const points = this.calculatePoints(bet.bets, event_result)
 
-            return await prisma.bets.update({
+            return await prisma.bets.updateMany({
                 data:{
                     points
                 },
                 where:{
-                    id:{userId: bet.userId, eventId: bet.eventId}
+                    userId: bet.userId,
+                    eventId: bet.eventId,
                 }
             })
 
@@ -135,18 +136,23 @@ export class PrismaEventResultsRepository implements EventsResultsRepository{
                 placing: 'asc'
             },
             include:{
-                competitor: true
+                competitor: true,
+                estandartes: {
+                    select:{
+                        name: true
+                    }
+                }
             }
         })
     }
 
     async findById(competitor_id: string,event_id: string): Promise<EventResults | null> {
-        return await prisma.eventResults.findUnique({
+        return await prisma.eventResults.findFirst({
             where:{
-                id:{
-                    competitorId: competitor_id,
-                    eventId: event_id
-                }
+                AND:[
+                    {competitorId: competitor_id},
+                    {eventId: event_id}
+                ]
             }
         })
     }
