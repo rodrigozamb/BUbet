@@ -29,7 +29,7 @@ export async function refresh(req: FastifyRequest, res: FastifyReply){
             .setCookie('bubet.token',refreshToken, {
                 path: '/',
                 secure: false,
-                sameSite: false,
+                sameSite: true,
                 httpOnly: false
             })
             .status(200)
