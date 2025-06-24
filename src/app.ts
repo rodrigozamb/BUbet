@@ -22,7 +22,7 @@ app.register(fastifyMultipart)
 // app.register(multer.contentParser)
 
 app.register(fastifyCors,{
-    origin: 'http://localhost:3000',
+    origin: 'https://bubet-frontend.vercel.app',
     methods: ['GET', 'POST', 'PUT', 'DELETE'], 
     allowedHeaders: ['Authorization','Content-Type'],
     credentials: true, 
