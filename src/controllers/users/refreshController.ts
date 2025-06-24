@@ -28,8 +28,9 @@ export async function refresh(req: FastifyRequest, res: FastifyReply){
         return res
             .setCookie('bubet.token',refreshToken, {
                 path: '/',
-                secure: false,
-                sameSite: true,
+                secure: true,
+                sameSite: 'none',
+                domain:'bu-bet.com',
                 httpOnly: false
             })
             .status(200)
