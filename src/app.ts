@@ -22,7 +22,7 @@ app.register(fastifyMultipart)
 // app.register(multer.contentParser)
 
 app.register(fastifyCors,{
-    origin: 'https://bubet-frontend.vercel.app',
+    origin: 'https://www.bu-bet.com',
     methods: ['GET', 'POST', 'PUT', 'DELETE'], 
     allowedHeaders: ['Authorization','Content-Type'],
     credentials: true, 
