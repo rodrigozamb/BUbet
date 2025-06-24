@@ -1,4 +1,4 @@
-import { BannerType, Bets, Competitor, Event, GoldenBanner, Prisma, User } from "@prisma/client";
+import { BannerType, Bets, Competitor, Event, Judge, Prisma } from "@prisma/client";
 import { EventsRepository } from "../events-repository";
 import { prisma } from "@/lib/prisma";
 
@@ -29,6 +29,28 @@ export class PrismaEventsRepository implements EventsRepository{
         })
     }
 
+
+    async addJudges(judges: Judge[], event_id: string): Promise< Event > {
+
+        const event = await prisma.event.findUnique({
+            where:{
+                id: event_id
+            }
+        })
+
+        const judges_ids = judges.map((jud)=>jud.id)
+         
+        const updatedEvent = await prisma.event.update({
+            where: { id: event_id },
+            data: {
+                judges:{
+                    connect: judges_ids.map( id => ( {id} ))
+                }
+            }
+        })
+
+        return updatedEvent
+    }
 
     async addCompetitors(competitors: Competitor[], event_id: string): Promise< Event > {
 

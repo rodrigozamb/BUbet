@@ -133,7 +133,7 @@ export class PrismaEventResultsRepository implements EventsResultsRepository{
         return await prisma.eventResults.findMany({
             where:{eventId},
             orderBy:{
-                placing: 'asc'
+                score: "desc"
             },
             include:{
                 competitor: true,

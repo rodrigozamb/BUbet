@@ -1,3 +1,4 @@
+import { goldenBannersRoutes } from "@/controllers/golden_banners/routes";
 import { GoldenBanner, Prisma } from "@prisma/client";
 
 export interface Estandarte{

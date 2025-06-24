@@ -25,7 +25,7 @@ export async function createBannerBet(req:FastifyRequest, res: FastifyReply){
             betId: bet_id
         }
     })
-    console.log(create_data)
+
     const createBannerBetUseCase = makeCreateBannersBetUseCase()
     const {  } = await createBannerBetUseCase.execute({
         data: create_data

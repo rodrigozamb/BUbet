@@ -6,9 +6,7 @@ export class PrismaGoldenBannersRepository implements GoldenBannersRepository{
 
 
     async createGoldenBannersBet(data: Prisma.GoldenBannerCreateManyInput[]): Promise<boolean> {
-        console.log(data)
         const res =  await prisma.goldenBanner.createMany({data})
-        console.log(res)
         return true
     }
 
