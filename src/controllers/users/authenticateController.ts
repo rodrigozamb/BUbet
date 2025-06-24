@@ -47,7 +47,7 @@ export async function authenticate(req: FastifyRequest, res: FastifyReply){
             .setCookie('bubet.token',refreshToken, {
                 path: '/',
                 secure: true,
-                sameSite: true,
+                sameSite: false,
                 httpOnly: false
             })
             .status(200)
