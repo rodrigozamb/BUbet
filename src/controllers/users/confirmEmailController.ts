@@ -1,7 +1,7 @@
 import { makeConfirmEmailUseCase } from "@/use-cases/factories/make-confirm-email-use-case";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
-
+import { env } from "@/env"
 
 
 export async function confirmEmail(req: FastifyRequest, res: FastifyReply){
@@ -15,9 +15,19 @@ export async function confirmEmail(req: FastifyRequest, res: FastifyReply){
     const {user_id} = confirmEmailParamsSchema.parse(req.params)
     
     const confirmEmailUseCase = makeConfirmEmailUseCase()
-    const { } = await confirmEmailUseCase.execute({
+    const { user } = await confirmEmailUseCase.execute({
         user_id
     })
-
-    return res.status(200).send()
+    const token = await res.jwtSign(
+        {
+            name:user.name,
+            profile_url: user.profile_url,
+            id: user.id
+        },
+        {
+        sign:{
+            sub: user.id,
+        }
+    })
+    return res.redirect(env.FRONTEND_URL+"/welcome/"+token)
 }
