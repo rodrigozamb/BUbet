@@ -8,11 +8,17 @@ import { ResourceNotFoundError } from "../errors/resource-not-found-error"
 
 interface CreateBulkEventResulstUseCaseRequest{
     event_id: string,
-    result: { id: string, score:number}[]
+    result: { 
+        id: string, 
+        score:number
+        banners:{
+            id: string
+        }[]
+    }[]
 }
 
 interface CreateBulkEventResultUseCaseResponse{
-    insertedCount: number
+    results:   EventResults[]
 }
 
 export class CreateBulkEventResultUseCase{
@@ -44,16 +50,19 @@ export class CreateBulkEventResultUseCase{
                 eventId: event_id,
                 competitorId: result[i].id,
                 score: result[i].score,
-                placing: (i+1).toString()
+                placing: (i+1).toString(),
+                estandartes:{
+                    connect: result[i].banners  
+                }
              })
         }
 
-        const insertedCount = await this.eventsResultsRepository.bulkCreate(
+        const results = await this.eventsResultsRepository.bulkCreate(
             data
         )  
 
         return {
-            insertedCount
+            results
         }
     }
 

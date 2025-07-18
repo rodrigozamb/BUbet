@@ -118,9 +118,16 @@ export class PrismaEventResultsRepository implements EventsResultsRepository{
         
     }
     
-    async bulkCreate(data: Prisma.EventResultsCreateManyInput[]): Promise< number > {
-        const res = await prisma.eventResults.createMany({data})
-        return res.count
+    async bulkCreate(data: Prisma.EventResultsCreateManyInput[]): Promise< EventResults[] > {
+        const promises:any = []
+        data.forEach((result)=>{
+            promises.push(
+                prisma.eventResults.create({data:result})
+            )
+        })
+        await Promise.all(promises)
+        const results = await prisma.eventResults.findMany({where:{ eventId: data[0].eventId }})
+        return results
     }
 
     async create(data: Prisma.EventResultsUncheckedCreateInput): Promise<EventResults> {
@@ -141,7 +148,8 @@ export class PrismaEventResultsRepository implements EventsResultsRepository{
                     select:{
                         name: true
                     }
-                }
+                },
+                
             }
         })
     }

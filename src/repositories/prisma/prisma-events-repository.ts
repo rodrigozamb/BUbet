@@ -29,6 +29,21 @@ export class PrismaEventsRepository implements EventsRepository{
         })
     }
 
+    async addGoldenBannersTypes(event_id:string, banner_types:BannerType[]){
+
+        const banner_ids = banner_types.map((jud)=>jud.id)
+         
+        const updatedEvent = await prisma.event.update({
+            where: { id: event_id },
+            data: {
+                event_banner_types:{
+                    connect: banner_ids.map( id => ( {id} ))
+                }
+            }
+        })
+
+        return updatedEvent
+    }
 
     async addJudges(judges: Judge[], event_id: string): Promise< Event > {
 
@@ -167,11 +182,14 @@ export class PrismaEventsRepository implements EventsRepository{
         })
     }
 
+
     async findById(id: string): Promise<Event | null> {
         return await prisma.event.findUnique({
             where:{id},
             include:{
-                judges:true
+                judges:true,
+                competitors: true,
+                event_banner_types: true
             }
         })
     }
@@ -179,6 +197,18 @@ export class PrismaEventsRepository implements EventsRepository{
     async create(data: Prisma.EventCreateInput): Promise<Event> {
         const event = await prisma.event.create({
             data
+        }) 
+
+        return event
+    }
+
+    async update(data: Prisma.EventUpdateInput, event_id: string): Promise<Event> {
+        const event = await prisma.event.update({
+            data,
+            where:{
+                id: event_id
+            }
+            
         }) 
 
         return event

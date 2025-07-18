@@ -3,6 +3,11 @@ import { prisma } from "@/lib/prisma";
 import { JudgesRepository } from "../judges-repository";
 
 export class PrismaJudgesRepository implements JudgesRepository{
+
+    async findAll(): Promise<Judge[]> {
+        return await prisma.judge.findMany()
+    }
+
     async findById(judge_id: string): Promise<Judge | null> {
         return await prisma.judge.findUnique({
             where:{
