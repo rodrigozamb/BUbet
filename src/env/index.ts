@@ -12,6 +12,7 @@ const envSchema = z.object({
     AWS_SECRET_ACCESS_KEY:z.string(),
     AWS_REGION:z.string(),
     AWS_BUCKET_NAME:z.string(),
+    FRONTEND_URL: z.string(),
 })
 
 const _env = envSchema.safeParse(process.env)

@@ -9,7 +9,7 @@ interface confirmEmailUseCaseRequest{
 }
 
 interface  confirmEmailUseCaseResponse{
-
+    user: User
 }
 
 
@@ -28,7 +28,7 @@ export class confirmEmailUseCase{
 
         await this.usersRepository.confirmEmail(user_id)
         return {
-            
+            user
         }
     }
 }
