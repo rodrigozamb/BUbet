@@ -70,7 +70,7 @@ export class PrismaEventResultsRepository implements EventsResultsRepository{
         if(!event_result){
             return null
         }
-    
+        event_result.sort((a,b) => Number(a.placing) - Number(b.placing) )
         const bets = await prisma.bets.findMany({
             where:{
                 eventId: event_id
