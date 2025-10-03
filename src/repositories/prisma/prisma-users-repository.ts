@@ -55,4 +55,15 @@ export class PrismaUsersRepository implements UsersRepository{
         }) 
     }
 
+    async update_last_activity(user_id: string): Promise<void>{
+        await prisma.user.update({
+            where:{
+                id: user_id
+            },
+            data:{
+                last_activity: new Date()
+            }
+        }) 
+    }
+
 }

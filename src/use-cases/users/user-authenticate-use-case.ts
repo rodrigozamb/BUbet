@@ -37,7 +37,7 @@ export class UserAuthenticateUseCase{
         if(!doesPasswordMatches){
             throw new InvalidCredentialsError()
         }
-
+        await this.usersRepository.update_last_activity(user.id)
         return {
             user
         }
