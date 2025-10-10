@@ -9,7 +9,7 @@ export class PrismaEventsRepository implements EventsRepository{
             where:{
             },
             orderBy:{
-                starts_at:'asc'
+                starts_at:'desc'
             }
         })
     }
