@@ -43,6 +43,9 @@ export class PrismaBetsRepository implements BetsRepository{
             where:{
                 userId
             },
+            orderBy:{
+                created_at:'desc'
+            },
             include:{
                 event: true
             }
