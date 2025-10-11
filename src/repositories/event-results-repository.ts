@@ -6,6 +6,7 @@ export interface EventsResultsRepository{
     create(data: Prisma.EventResultsUncheckedCreateInput):Promise<EventResults>
     bulkCreate(data: Prisma.EventResultsUncheckedCreateInput[]):Promise<EventResults[]>
     applyPoints(event_id: string): Promise<null>
+    updateUserPagePoints():Promise<any>
     findEventCompetitors(event_id: string): Promise<Competitor[] | null>
     getCompetitorStatistics(competitor_id: string): Promise<{first: string,second: string,third: string,others: string, all: string}>
 }

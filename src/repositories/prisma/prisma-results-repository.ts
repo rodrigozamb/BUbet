@@ -102,6 +102,38 @@ export class PrismaEventResultsRepository implements EventsResultsRepository{
         return null;
     }
 
+  
+
+    async updateUserPagePoints(){
+        const users_dict: {[key: string]: number} =  {}
+        const all_bets = await prisma.bets.findMany({ })
+
+        all_bets.map((bet)=>{
+            const user_id = bet.userId
+            if ( bet.userId in users_dict ){
+                users_dict[user_id] += bet.points
+            }else{
+                users_dict[user_id] = bet.points
+            }
+        })
+
+        const promises:any = []
+        for (let key in users_dict) {
+            let value = users_dict[key];
+            promises.push( await prisma.user.update({
+                where:{
+                    id: key
+                },
+                data:{
+                    points: value
+                }
+            }))
+        }
+        var updatedUsers = await Promise.all(promises)
+        updatedUsers = updatedUsers.filter(n => n)
+        
+        return updatedUsers
+    }
 
     calculatePoints(userBets: string[], results: EventResults[]){
 
