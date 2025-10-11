@@ -34,7 +34,8 @@ export class PrismaUsersRepository implements UsersRepository{
                 name: true,
                 profile_url:true,
                 id:true,
-                username:true
+                username:true,
+                points: true
             }
 
         })
@@ -48,7 +49,8 @@ export class PrismaUsersRepository implements UsersRepository{
                 name: true,
                 profile_url:true,
                 id:true,
-                username:true
+                username:true,
+                points: true
             }
         })
 
