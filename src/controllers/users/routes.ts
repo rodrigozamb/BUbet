@@ -9,6 +9,7 @@ import { deleteUser } from "./deleteUserController"
 import { confirmEmail } from "./confirmEmailController"
 import multer from 'fastify-multer'
 import { getUser } from "./getUserController"
+import { listUsersByRank } from "./listUsersByRankController"
 
 const storage = multer.memoryStorage(); // Storing the file in memory before uploading to S3
 const upload = multer({ storage });
@@ -22,6 +23,7 @@ export async function userRoutes (app: FastifyInstance){
     app.patch('/token/refresh', refresh)
 
     /** Authenticated **/
+    app.get('/users/ranking',{onRequest:[verifyJWT]}, listUsersByRank)
     app.get('/users/profile', {onRequest:[verifyJWT]} ,getSelfUser)
     app.get('/users/profile/:user_id', {onRequest:[verifyJWT]} ,getUser)
     app.put('/users/profile', {onRequest:[verifyJWT]} , updateUser)

@@ -19,7 +19,42 @@ export class PrismaUsersRepository implements UsersRepository{
         })
     }
 
+    async listUsersByRank():Promise<{}[]>{
+        const pointed_ranks =  await prisma.user.findMany({
+            where:{
+                position:{
+                    gt: 0
+                }
+            },
+            orderBy:{
+                position:"asc"
+            },
+            select:{
+                position:true,
+                name: true,
+                profile_url:true,
+                id:true,
+                username:true
+            }
 
+        })
+
+        const zero_ranks =  await prisma.user.findMany({
+            where:{
+                position: 0
+            },
+            select:{
+                position:true,
+                name: true,
+                profile_url:true,
+                id:true,
+                username:true
+            }
+        })
+
+        return pointed_ranks.concat(zero_ranks)
+    }
+    
     async update(user_id: string, data: Prisma.UserUpdateInput): Promise<User> {
         return await prisma.user.update({
             data,

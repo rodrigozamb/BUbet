@@ -8,4 +8,5 @@ export interface UsersRepository{
     delete(user_id: string): Promise<User>
     confirmEmail(user_id: string):Promise<void>
     update_last_activity(user_id: string): Promise<void>
+    listUsersByRank():Promise<{}[]>
 }
