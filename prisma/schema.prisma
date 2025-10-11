@@ -23,6 +23,7 @@ model User {
   name          String
   username      String
   position      Int            @default(0)
+  points        Int            @default(0)
   profile_url   String?
   email         String         @unique
   role          Role           @default(USER)
@@ -74,7 +75,7 @@ model Competitor {
 }
 
 model EventResults {
-  id          String @id @default(uuid())
+  id           String       @id @default(uuid())
   eventId      String
   competitorId String
   placing      String
