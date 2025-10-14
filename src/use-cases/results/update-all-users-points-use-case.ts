@@ -16,7 +16,7 @@ export class UpdateAllUsersPointsUseCase{
 
 
         await this.resultsRepository.updateUserPagePoints()
-
+        await this.resultsRepository.updateUsersPositions()
         return { }
     }
 

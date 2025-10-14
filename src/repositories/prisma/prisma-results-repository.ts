@@ -102,7 +102,37 @@ export class PrismaEventResultsRepository implements EventsResultsRepository{
         return null;
     }
 
-  
+    async updateUsersPositions(){
+        let all_users = await prisma.user.findMany({
+            where:{
+                points:{
+                    gt:0
+                }
+            },
+            orderBy:{
+                points:'desc'
+            }
+        })
+
+        let i = 0
+        const promises:any = []
+        all_users.forEach(async (user)=>{
+            i+=1
+            console.log(user.name)
+            return await prisma.user.update({
+                data:{
+                    position: i
+                },
+                where:{
+                    id: user.id,
+                }
+            })
+            
+
+        })
+        var updatedUsers = await Promise.all(promises)
+        return updatedUsers.filter(n => n)
+    }
 
     async updateUserPagePoints(){
         const users_dict: {[key: string]: number} =  {}
