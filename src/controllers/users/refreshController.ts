@@ -1,5 +1,5 @@
 import { FastifyRequest, FastifyReply } from "fastify"
-
+import { env } from "@/env"
 export async function refresh(req: FastifyRequest, res: FastifyReply){
 
     await req.jwtVerify({ onlyCookie: true })
@@ -29,8 +29,8 @@ export async function refresh(req: FastifyRequest, res: FastifyReply){
             .setCookie('bubet.token',refreshToken, {
                 path: '/',
                 secure: true,
-                sameSite: 'none',
-                domain:'bu-bet.com',
+                sameSite: env.NODE_ENV == 'dev' ? 'none' : true,
+                domain:env.NODE_ENV == 'dev' ? 'bu-bet.com' : undefined,
                 httpOnly: false
             })
             .status(200)

@@ -2,7 +2,7 @@ import { FastifyRequest, FastifyReply } from "fastify"
 import { z } from "zod"
 import { InvalidCredentialsError } from "@/use-cases/errors/invalid-credentials-error"
 import { makeAuthenticateUseCase } from "@/use-cases/factories/make-authenticate-use-case"
-
+import { env } from "@/env"
 export async function authenticate(req: FastifyRequest, res: FastifyReply){
 
     const authenticateBodySchema = z.object({
@@ -47,8 +47,8 @@ export async function authenticate(req: FastifyRequest, res: FastifyReply){
             .setCookie('bubet.token',refreshToken, {
                 path: '/',
                 secure: true,
-                sameSite: 'none',
-                domain:'bu-bet.com',
+                sameSite: env.NODE_ENV == 'dev' ? 'none' : true,
+                domain:env.NODE_ENV == 'dev' ? 'bu-bet.com' : undefined,
                 httpOnly: false
             })
             .status(200)

@@ -22,7 +22,7 @@ app.register(fastifyMultipart)
 // app.register(multer.contentParser)
 
 app.register(fastifyCors,{
-    origin: 'https://www.bu-bet.com',
+    origin: env.ORIGIN,
     methods: ['GET', 'POST', 'PUT', 'DELETE'], 
     allowedHeaders: ['Authorization','Content-Type'],
     credentials: true, 

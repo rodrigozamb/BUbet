@@ -2,7 +2,7 @@ import 'dotenv/config'
 import { z } from 'zod'
 
 const envSchema = z.object({
-    NODE_ENV: z.enum(['dev','test','production']).default('dev'),
+    NODE_ENV: z.enum(['local','dev','test','production']).default('local'),
     JWT_SECRET: z.string(),
     PORT: z.coerce.number().default(3333),
     GMAIL_USER: z.string().email(),
@@ -13,6 +13,7 @@ const envSchema = z.object({
     AWS_REGION:z.string(),
     AWS_BUCKET_NAME:z.string(),
     FRONTEND_URL: z.string(),
+    ORIGIN: z.string(),
 })
 
 const _env = envSchema.safeParse(process.env)
