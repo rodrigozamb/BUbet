@@ -25,8 +25,9 @@ export class confirmEmailUseCase{
         if(!user){
             throw new UserNotFoundError()
         }
-
-        await this.usersRepository.confirmEmail(user_id)
+        if(!user.is_confirmed){
+            await this.usersRepository.confirmEmail(user_id)
+        }
         return {
             user
         }

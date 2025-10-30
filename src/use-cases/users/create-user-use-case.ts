@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid'
 import { hash } from "bcryptjs"
 import { UserAlreadyExistsError } from "../errors/user-already-exists-error"
 import { User } from "@prisma/client"
-import { sendConfirmationEmail } from "@/utils/sendMail"
+import { resend_sendConfirmationEmail, sendConfirmationEmail } from "@/utils/sendMail"
 import { env } from './../../env'
 import { s3 } from "@/utils/s3"
 interface CreateUserUseCaseRequest{
@@ -53,8 +53,8 @@ export class CreateUserUseCase{
             })
     
 
-            // Send Confirmation Email with nodemailer
-            await sendConfirmationEmail(user.email, user.id)
+            // Send Confirmation Email with resend
+            await resend_sendConfirmationEmail(user.email, user.id)
     
             return {
                 user

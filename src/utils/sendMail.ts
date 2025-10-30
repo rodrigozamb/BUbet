@@ -1,6 +1,8 @@
 import { env } from '@/env'
 import nodemailer from 'nodemailer'
+import { Resend } from 'resend';
 
+const resend = new Resend(env.RESEND_KEY);
 
 const transporter = nodemailer.createTransport({
     service:'gmail',
@@ -29,4 +31,24 @@ export async function sendConfirmationEmail(to: string, user_id: string) {
   
     console.log("Message sent: %s", info.messageId);
     // Message sent: <d786aa62-4e0a-070a-47ed-0b0666549519@ethereal.email>
+  }
+
+
+  
+export async function resend_sendConfirmationEmail(to: string, user_id: string) {
+    // send mail with defined transport object
+    const {data, error} = await resend.emails.send({
+      from: "BU Bet Team <bubet@send.api.bu-bet.com>",
+      to: [to],
+      subject: "Confirmação de Cadastro", // Subject line
+      text: `Obrigado por se cadastrar na nossa plataforma, clique no LINK para confirmar sua conta`, // plain text body
+      html: `<b>Obrigado por se cadastrar na nossa plataforma, clique no <a target="_blank" href=${env.CONFIRMATION_URL}/${user_id}> LINK </a> para confirmar sua conta </b>`, // html body
+    });
+  
+    if (error) {
+      console.log("Error sending message");
+      return console.error({ error });
+    }
+    console.log("Message sent");
+    console.log({ data });
   }
