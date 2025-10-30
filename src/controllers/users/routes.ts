@@ -10,6 +10,8 @@ import { confirmEmail } from "./confirmEmailController"
 import multer from 'fastify-multer'
 import { getUser } from "./getUserController"
 import { listUsersByRank } from "./listUsersByRankController"
+import { updateUserPassword } from "./redefinePasswordController"
+import { forgetPasswordController } from "./forgetPasswordController"
 
 const storage = multer.memoryStorage(); // Storing the file in memory before uploading to S3
 const upload = multer({ storage });
@@ -20,6 +22,8 @@ export async function userRoutes (app: FastifyInstance){
     app.post('/users',{ preHandler: upload.single('profile') }, createUser)
     app.get('/confirmation/:user_id', confirmEmail)
     app.post('/login',authenticate)
+    app.post('/forget',forgetPasswordController)
+    app.post('/redefine',updateUserPassword)
     app.patch('/token/refresh', refresh)
 
     /** Authenticated **/

@@ -1,6 +1,7 @@
 import { User, Prisma, Bets } from "@prisma/client";
 import { UsersRepository } from "../users-repository";
 import { prisma } from "@/lib/prisma";
+import { hash } from "bcryptjs";
 
 export class PrismaUsersRepository implements UsersRepository{
     
@@ -15,6 +16,22 @@ export class PrismaUsersRepository implements UsersRepository{
             },
             data:{
                 is_confirmed: new Date()
+            }
+        })
+    }
+    
+    async update_password(user_id: string, new_password: string): Promise<User> {
+
+        const password_hash = await hash(new_password, 6)
+        return await prisma.user.update({
+            where:{
+                id: user_id,
+                is_confirmed:{
+                    equals: null
+                }
+            },
+            data:{
+                password_hash: password_hash
             }
         })
     }

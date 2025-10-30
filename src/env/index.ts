@@ -15,6 +15,9 @@ const envSchema = z.object({
     FRONTEND_URL: z.string(),
     ORIGIN: z.string(),
     RESEND_KEY: z.string(),
+    FORGET_PASSWORD_SECRET: z.string(),
+    REDEFINE_PASSWORD_URL: z.string()
+
 })
 
 const _env = envSchema.safeParse(process.env)

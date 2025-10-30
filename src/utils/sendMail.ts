@@ -52,3 +52,21 @@ export async function resend_sendConfirmationEmail(to: string, user_id: string) 
     console.log("Message sent");
     console.log({ data });
   }
+
+export async function resend_sendForgetPassword(to: string, token: string) {
+    // send mail with defined transport object
+    const {data, error} = await resend.emails.send({
+      from: "BU Bet Team <bubet@send.api.bu-bet.com>",
+      to: [to],
+      subject: "Redefinição de Senha", // Subject line
+      text: `Para redefinir sua senha clique AQUI!!!`, // plain text body
+      html: `<b>Para redefinir sua senha clique <a target="_blank" href=${env.REDEFINE_PASSWORD_URL}/${token}> AQUI </a> </b>`, // html body
+    });
+  
+    if (error) {
+      console.log("Error sending message");
+      return console.error({ error });
+    }
+    console.log("Message sent");
+    console.log({ data });
+  }

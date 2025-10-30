@@ -5,6 +5,7 @@ export interface UsersRepository{
     findByEmail(email:string) : Promise<User | null>
     create(data: Prisma.UserCreateInput):Promise<User>
     update(user_id: string, data: Prisma.UserUpdateInput): Promise<User>
+    update_password(user_id: string, new_password: string): Promise<User>
     delete(user_id: string): Promise<User>
     confirmEmail(user_id: string):Promise<void>
     update_last_activity(user_id: string): Promise<void>
