@@ -60,7 +60,7 @@ export async function resend_sendForgetPassword(to: string, token: string) {
       to: [to],
       subject: "Redefinição de Senha", // Subject line
       text: `Para redefinir sua senha clique AQUI!!!`, // plain text body
-      html: `<b>Para redefinir sua senha clique <a target="_blank" href=${env.REDEFINE_PASSWORD_URL}/${token}> AQUI </a> </b>`, // html body
+      html: `<b>Para redefinir sua senha clique <a target="_blank" href=${env.FRONTEND_URL}/redefine/${token}> AQUI </a> </b>`, // html body
     });
   
     if (error) {
