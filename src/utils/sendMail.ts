@@ -70,3 +70,22 @@ export async function resend_sendForgetPassword(to: string, token: string) {
     console.log("Message sent");
     console.log({ data });
   }
+
+export async function resend_sendNewUsercreatedEmail(to: string, name: string, email: string) {
+    // send mail with defined transport object
+    const {data, error} = await resend.emails.send({
+      from: "BU Bet Team <bubet@send.api.bu-bet.com>",
+      to: [to],
+      subject: "novo usuário criado", // Subject line
+      text: `Novo usuário criado!!!`, // plain text body
+      html: `<b>Novo usuário criado : ${name} - ${email}`, // html body
+    });
+  
+    if (error) {
+      console.log("Error sending message");
+      return console.error({ error });
+    }
+    console.log("Message sent");
+    console.log({ data });
+  }
+

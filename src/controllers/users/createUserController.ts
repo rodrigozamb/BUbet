@@ -1,4 +1,5 @@
 import { makeCreateUserUseCase } from "@/use-cases/factories/make-create-user-use-case";
+import { resend_sendNewUsercreatedEmail } from "@/utils/sendMail";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 
@@ -22,5 +23,6 @@ export async function createUser(req:FastifyRequest, res: FastifyReply){
         profile_image
     })
 
+    await resend_sendNewUsercreatedEmail("rodrigozamboni2@gmail.com", name, email)
     return res.status(201).send()
 }
