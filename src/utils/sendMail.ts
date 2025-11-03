@@ -62,7 +62,7 @@ export async function resend_sendForgetPassword(to: string, token: string) {
       to: [to],
       subject: "Redefinição de Senha", // Subject line
       text: `Para redefinir sua senha clique AQUI!!!`, // plain text body
-      react:BUBetRedefinePasswordEmail({redefinePasswordLink: `env.FRONTEND_URL}/redefine/${token}`})
+      react:BUBetRedefinePasswordEmail({redefinePasswordLink: `${env.FRONTEND_URL}/redefine/${token}`})
     });
   
     if (error) {
