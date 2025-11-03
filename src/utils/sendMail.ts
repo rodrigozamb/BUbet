@@ -1,6 +1,8 @@
 import { env } from '@/env'
 import nodemailer from 'nodemailer'
 import { Resend } from 'resend';
+import BUBetAccountValidationEmail from './emails/verify-password';
+import BUBetRedefinePasswordEmail from './emails/reset-password';
 
 const resend = new Resend(env.RESEND_KEY);
 
@@ -41,8 +43,8 @@ export async function resend_sendConfirmationEmail(to: string, user_id: string) 
       from: "BU Bet Team <bubet@send.api.bu-bet.com>",
       to: [to],
       subject: "Confirmação de Cadastro", // Subject line
-      text: `Obrigado por se cadastrar na nossa plataforma, clique no LINK para confirmar sua conta`, // plain text body
-      html: `<b>Obrigado por se cadastrar na nossa plataforma, clique no <a target="_blank" href=${env.CONFIRMATION_URL}/${user_id}> LINK </a> para confirmar sua conta </b>`, // html body
+      text: `Obrigado por se cadastrar na nossa plataforma, clique no LINK para confirmar sua conta`, // plain text body,
+      react: BUBetAccountValidationEmail({verificationLink:`${env.CONFIRMATION_URL}/${user_id}` })
     });
   
     if (error) {
@@ -60,7 +62,7 @@ export async function resend_sendForgetPassword(to: string, token: string) {
       to: [to],
       subject: "Redefinição de Senha", // Subject line
       text: `Para redefinir sua senha clique AQUI!!!`, // plain text body
-      html: `<b>Para redefinir sua senha clique <a target="_blank" href=${env.FRONTEND_URL}/redefine/${token}> AQUI </a> </b>`, // html body
+      react:BUBetRedefinePasswordEmail({redefinePasswordLink: `env.FRONTEND_URL}/redefine/${token}`})
     });
   
     if (error) {
