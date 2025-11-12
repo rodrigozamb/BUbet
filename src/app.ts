@@ -14,6 +14,7 @@ import fastifyMultipart from "@fastify/multipart";
 import { judgesRoutes } from "./controllers/judges/routes";
 import { feedbacksRoutes } from "./controllers/feedbacks/routes";
 import { goldenBannersRoutes } from "./controllers/golden_banners/routes";
+import { notificationRoutes } from "./controllers/notifications/route";
 
 require('aws-sdk/lib/maintenance_mode_message').suppress = true;
 export const app = fastify()
@@ -50,6 +51,7 @@ app.register(resultsRoutes)
 app.register(judgesRoutes)
 app.register(feedbacksRoutes)
 app.register(goldenBannersRoutes)
+app.register(notificationRoutes)
 app.setErrorHandler((error, _, res)=>{
 
     if (error instanceof ZodError){

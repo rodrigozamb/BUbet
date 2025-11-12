@@ -63,10 +63,12 @@ export class PrismaEventResultsRepository implements EventsResultsRepository{
         const event = await prisma.event.findUnique({
             where:{id:event_id},
             include:{
-                eventResults: true
+                eventResults: true,
+                //estandartes: true
             }
         })
         const event_result = event?.eventResults
+        //let event_golden_banners = event?.estandartes
         if(!event_result){
             return null
         }
@@ -82,6 +84,20 @@ export class PrismaEventResultsRepository implements EventsResultsRepository{
 
         const promises:any = []
         bets.forEach(async (bet)=>{
+            
+/*             const user_golden_banners = await prisma.goldenBanner.findMany({
+                where:{
+                    AND:[
+                        {
+                            eventId: event_id
+                        },
+                        {
+                            userId: bet.userId
+                        }
+                    ]
+                }
+            }) */
+            
             const points = this.calculatePoints(bet.bets, event_result)
 
             return await prisma.bets.updateMany({
@@ -170,7 +186,7 @@ export class PrismaEventResultsRepository implements EventsResultsRepository{
         const max_points = results.length
         let pts = 0
 
-        for(let i=0; i < results.length;i++){
+        for(let i=0; i < results.length;i++){            
             if(userBets[i] === results[i].competitorId){
                 pts +=  (max_points-i)
             }
