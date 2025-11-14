@@ -98,6 +98,26 @@ export class PrismaUsersRepository implements UsersRepository{
         }) 
         return user
     }
+
+    async findSelfById(id: string): Promise<User | null> {
+        let user = await prisma.user.findUnique({
+            where:{id},
+            include:{
+                bets: true,
+                notifications: {
+                    where:{
+                        is_visualized: null
+                    },
+                    select:{
+                        notification: true,
+                        id:true
+                    }
+                }
+            }
+        })
+        return user
+    }
+
     async findByEmail(email: string): Promise<User | null> {
         return prisma.user.findUnique({
             where:{email}
