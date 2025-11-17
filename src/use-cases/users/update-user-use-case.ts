@@ -45,7 +45,7 @@ export class UpdateUserUseCase{
             password_hash = await hash(password, 6)
         }
 
-        if(profile_image){
+        if(profile_image.buffer){
             const uploadParams = {
                 Bucket: env.AWS_BUCKET_NAME,       // Your S3 bucket name
                 Key: `users/user-${user_id}`,           // S3 object name (where to store in the bucket)
