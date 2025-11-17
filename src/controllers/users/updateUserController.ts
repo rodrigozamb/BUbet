@@ -26,5 +26,5 @@ export async function updateUser(req: FastifyRequest, res: FastifyReply){
         profile_image
     })
 
-    return res.status(201).send(user)
+    return res.status(201).send()
 }
