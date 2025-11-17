@@ -13,6 +13,7 @@ export async function updateUser(req: FastifyRequest, res: FastifyReply){
     })
 
     
+    const profile_image = req.file
     const {email,name,password,username} = updateUserBodySchema.parse(req.body)
 
     const updateUserUseCase = makeUpdateUserUseCase()
@@ -21,7 +22,8 @@ export async function updateUser(req: FastifyRequest, res: FastifyReply){
         email,
         name,
         password,
-        username
+        username,
+        profile_image
     })
 
     return res.status(201).send(user)

@@ -30,7 +30,7 @@ export async function userRoutes (app: FastifyInstance){
     app.get('/users/ranking',{onRequest:[verifyJWT]}, listUsersByRank)
     app.get('/users/profile', {onRequest:[verifyJWT]} ,getSelfUser)
     app.get('/users/profile/:user_id', {onRequest:[verifyJWT]} ,getUser)
-    app.put('/users/profile', {onRequest:[verifyJWT]} , updateUser)
+    app.put('/users/profile', { preHandler: upload.single('profile') , onRequest:[verifyJWT] } , updateUser)
     app.delete('/users/profile', {onRequest:[verifyJWT]} , deleteUser)
     
 
