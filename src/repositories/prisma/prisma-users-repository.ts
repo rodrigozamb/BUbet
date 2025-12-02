@@ -93,8 +93,8 @@ export class PrismaUsersRepository implements UsersRepository{
         const user = prisma.user.findUnique({
             where:{id},
             include:{
-                bets: true,
                 badges: true,
+                bets: true,
                 favorite_competitor: true
             }
         }) 
@@ -105,6 +105,7 @@ export class PrismaUsersRepository implements UsersRepository{
         let user = await prisma.user.findUnique({
             where:{id},
             include:{
+                badges: true,
                 bets: true,
                 notifications: {
                     where:{
@@ -115,7 +116,6 @@ export class PrismaUsersRepository implements UsersRepository{
                         id:true
                     }
                 },
-                badges: true,
                 favorite_competitor:true
             }
         })
