@@ -36,6 +36,10 @@ model User {
   GoldenBanner  GoldenBanner[]
 
   notifications UserNotification[]
+  badges        Badge[]
+
+  favorite_competitor    Competitor? @relation(fields: [favorite_competitor_id], references: [id])
+  favorite_competitor_id String?
 
   @@map("users")
 }
@@ -72,6 +76,9 @@ model Competitor {
   events       Event[]
   eventResults EventResults[]
   estandartes  GoldenBanner[]
+  users        User[]
+
+  badges Badge[]
 
   @@map("competitors")
 }
@@ -119,6 +126,7 @@ model Judge {
   avatar      String
 
   events Event[]
+  badges Badge[]
 
   @@map("judges")
 }
@@ -192,4 +200,18 @@ model UserNotification {
   notification Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("user_notifications")
+}
+
+model Badge {
+  id          String   @id @default(uuid())
+  created_at  DateTime @default(now())
+  name        String
+  description String
+  image_url   String
+
+  users       User[]
+  competitors Competitor[]
+  judges      Judge[]
+
+  @@map("badges")
 }
