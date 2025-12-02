@@ -94,8 +94,8 @@ export class PrismaUsersRepository implements UsersRepository{
             where:{id},
             include:{
                 bets: true,
-                favorite_competitor: true,
-                badges: true
+                badges: true,
+                favorite_competitor: true
             }
         }) 
         return user
@@ -115,8 +115,8 @@ export class PrismaUsersRepository implements UsersRepository{
                         id:true
                     }
                 },
-                favorite_competitor: true,
-                badges: true
+                badges: true,
+                favorite_competitor:true
             }
         })
         return user
