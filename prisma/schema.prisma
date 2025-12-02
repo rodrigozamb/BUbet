@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,104 +7,88 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  USER
-  ADMIN
-}
-
 model User {
-  id            String         @id @default(uuid())
-  name          String
-  username      String
-  position      Int            @default(0)
-  points        Int            @default(0)
-  profile_url   String?
-  email         String         @unique
-  role          Role           @default(USER)
-  password_hash String
-  created_at    DateTime       @default(now())
-  is_confirmed  DateTime?
-  last_activity DateTime?
-  bets          Bets[]
-  Feedback      Feedback[]
-  GoldenBanner  GoldenBanner[]
-
-  notifications UserNotification[]
-  badges        Badge[]
-
-  favorite_competitor    Competitor? @relation(fields: [favorite_competitor_id], references: [id])
+  id                     String             @id @default(uuid())
+  name                   String
+  email                  String             @unique
+  password_hash          String
+  created_at             DateTime           @default(now())
+  username               String
+  role                   Role               @default(USER)
+  is_confirmed           DateTime?
+  profile_url            String?
+  position               Int                @default(0)
+  last_activity          DateTime?
+  points                 Int                @default(0)
   favorite_competitor_id String?
+  bets                   Bets[]
+  Feedback               Feedback[]
+  GoldenBanner           GoldenBanner[]
+  notifications          UserNotification[]
+  favorite_competitor    Competitor?        @relation(fields: [favorite_competitor_id], references: [id])
+  badges                 Badge[]            @relation("BadgeToUser")
 
   @@map("users")
 }
 
 model Event {
-  id          String   @id @default(uuid())
-  name        String
-  description String
-  local       String   @default("Não Definido")
-  date        DateTime
-  banner      String
-  starts_at   DateTime
-  ends_at     DateTime
-  created_at  DateTime @default(now())
-
-  competitors        Competitor[]
-  eventResults       EventResults[]
+  id                 String         @id @default(uuid())
+  name               String
+  description        String
+  date               DateTime
+  starts_at          DateTime
+  ends_at            DateTime
+  created_at         DateTime       @default(now())
+  banner             String
+  local              String         @default("Não Definido")
   bets               Bets[]
-  judges             Judge[]
+  eventResults       EventResults[]
   estandartes        GoldenBanner[]
-  event_banner_types BannerType[]
+  event_banner_types BannerType[]   @relation("BannerTypeToEvent")
+  competitors        Competitor[]   @relation("CompetitorToEvent")
+  judges             Judge[]        @relation("EventToJudge")
 
   @@map("events")
 }
 
 model Competitor {
-  id          String @id @default(uuid())
-  name        String
-  description String
-  profile_url String
-
-  created_at DateTime @default(now())
-
-  events       Event[]
+  id           String         @id @default(uuid())
+  name         String
+  profile_url  String
+  created_at   DateTime       @default(now())
+  description  String
   eventResults EventResults[]
   estandartes  GoldenBanner[]
   users        User[]
-
-  badges Badge[]
+  badges       Badge[]        @relation("BadgeToCompetitor")
+  events       Event[]        @relation("CompetitorToEvent")
 
   @@map("competitors")
 }
 
 model EventResults {
-  id           String       @id @default(uuid())
   eventId      String
   competitorId String
   placing      String
+  created_at   DateTime     @default(now())
   score        Float
-  estandartes  BannerType[]
-
-  competitor Competitor @relation(fields: [competitorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  event      Event      @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
-  created_at DateTime @default(now())
+  id           String       @id @default(uuid())
+  competitor   Competitor   @relation(fields: [competitorId], references: [id], onDelete: Cascade)
+  event        Event        @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  estandartes  BannerType[] @relation("BannerTypeToEventResults")
 
   @@map("events_results")
 }
 
 model Bets {
-  id      String   @id @default(uuid())
-  userId  String
-  eventId String
-  bets    String[]
-
-  points Int @default(0)
-
-  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
+  userId      String
+  eventId     String
+  bets        String[]
   created_at  DateTime       @default(now())
+  points      Int            @default(0)
+  id          String         @id @default(uuid())
+  event       Event          @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   estandartes GoldenBanner[]
 
   @@index([userId, eventId])
@@ -118,29 +96,25 @@ model Bets {
 }
 
 model Judge {
-  id          String @id @default(uuid())
+  id          String  @id @default(uuid())
+  description String
+  avatar      String
   first_name  String
   last_name   String
   nickname    String
-  description String
-  avatar      String
-
-  events Event[]
-  badges Badge[]
+  badges      Badge[] @relation("BadgeToJudge")
+  events      Event[] @relation("EventToJudge")
 
   @@map("judges")
 }
 
 model BannerType {
-  id          String @id @default(uuid())
-  name        String
-  description String
-
+  id           String         @id @default(uuid())
+  name         String
+  description  String
   goldenBanner GoldenBanner[]
-
-  events Event[]
-
-  resultado EventResults[]
+  events       Event[]        @relation("BannerTypeToEvent")
+  resultado    EventResults[] @relation("BannerTypeToEventResults")
 
   @@map("banner_types")
 }
@@ -149,69 +123,68 @@ model GoldenBanner {
   competitorId String
   eventId      String
   bannerTypeId String
-  userId       String
   betId        String
+  userId       String
+  bannerType   BannerType @relation(fields: [bannerTypeId], references: [id], onDelete: Cascade)
+  bet          Bets       @relation(fields: [betId], references: [id], onDelete: Cascade)
+  competitor   Competitor @relation(fields: [competitorId], references: [id], onDelete: Cascade)
+  event        Event      @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  bet        Bets       @relation(fields: [betId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  competitor Competitor @relation(fields: [competitorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  event      Event      @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  bannerType BannerType @relation(fields: [bannerTypeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
-  @@id(name: "id", [competitorId, eventId, bannerTypeId, userId])
+  @@id([competitorId, eventId, bannerTypeId, userId], name: "id")
   @@map("golden_banners")
 }
 
 model Feedback {
-  id       String  @id @default(uuid())
-  userId   String
-  content  String
-  verified Boolean @default(false)
-  image    String?
-
+  id         String   @id @default(uuid())
+  userId     String
+  content    String
   created_at DateTime @default(now())
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  image      String?
+  verified   Boolean  @default(false)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("feedbacks")
 }
 
 model Notification {
-  id         String   @id @default(uuid())
-  title      String
-  content    String
-  link       String?
-  created_at DateTime @default(now())
-  icon       String?
-
+  id                String             @id @default(uuid())
+  title             String
+  content           String
+  icon              String?
+  created_at        DateTime           @default(now())
+  link              String?
   userNotifications UserNotification[]
 
   @@map("notifications")
 }
 
 model UserNotification {
-  id            String    @id @default(uuid())
-  is_visualized DateTime?
-  created_at    DateTime  @default(now())
-
+  id             String       @id @default(uuid())
+  is_visualized  DateTime?
+  created_at     DateTime     @default(now())
   userId         String
   notificationId String
-
-  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  notification Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  notification   Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("user_notifications")
 }
 
 model Badge {
-  id          String   @id @default(uuid())
-  created_at  DateTime @default(now())
+  id          String       @id @default(uuid())
+  created_at  DateTime     @default(now())
   name        String
   description String
   image_url   String
-
-  users       User[]
-  competitors Competitor[]
-  judges      Judge[]
+  competitors Competitor[] @relation("BadgeToCompetitor")
+  judges      Judge[]      @relation("BadgeToJudge")
+  users       User[]       @relation("BadgeToUser")
 
   @@map("badges")
+}
+
+enum Role {
+  USER
+  ADMIN
 }
