@@ -90,14 +90,17 @@ export class PrismaUsersRepository implements UsersRepository{
     }
 
     async findById(id: string): Promise<User | null> {
-        const user = prisma.user.findUnique({
+        let user = await prisma.user.findUnique({
             where:{id},
             include:{
                 badges: true,
                 bets: true,
                 favorite_competitor: true
             }
-        }) 
+        })
+        if(user){
+            user.badges.sort((a,b) => new Date(b.created_at).valueOf() - new Date(a.created_at).valueOf() )
+        }
         return user
     }
 
@@ -119,6 +122,9 @@ export class PrismaUsersRepository implements UsersRepository{
                 favorite_competitor:true
             }
         })
+        if(user){
+            user.badges.sort((a,b) => new Date(b.created_at).valueOf() - new Date(a.created_at).valueOf() )
+        }
         return user
     }
 
