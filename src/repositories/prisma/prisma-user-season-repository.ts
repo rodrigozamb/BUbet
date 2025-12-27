@@ -8,10 +8,23 @@ export class PrismaUserSeasonsRepository implements UserSeasonsRepository{
         const a = await prisma.userSeason.findMany({
             where:{
                 seasonId: season_id
+            },
+            include:{
+                user:{
+                    select:{
+                        name: true,
+                        profile_url: true,
+                        id: true
+                    }
+                }
+            },
+            orderBy:{
+                position:'asc'
             }
         })
-
-        return a
+        const z = a.filter(item => item.position > 0)
+        const nz = a.filter(item => item.position < 1)
+        return z.concat(nz);
     }
 
     async bulkCreate(data: Prisma.UserSeasonUncheckedCreateInput[]): Promise<number> {
