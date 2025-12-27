@@ -3,6 +3,7 @@ import nodemailer from 'nodemailer'
 import { Resend } from 'resend';
 import BUBetAccountValidationEmail from './emails/verify-password';
 import BUBetRedefinePasswordEmail from './emails/reset-password';
+import FinalDeAnoEmail from './emails/final-de-ano';
 
 const resend = new Resend(env.RESEND_KEY);
 
@@ -91,3 +92,20 @@ export async function resend_sendNewUsercreatedEmail(to: string, name: string, e
     console.log({ data });
   }
 
+export async function resend_FinalDeAnoEmail(to: string) {
+    // send mail with defined transport object
+    const {data, error} = await resend.emails.send({
+      from: "BU Bet Team <bubet@send.api.bu-bet.com>",
+      to: [to],
+      subject: "A Temporada 2025 chegou ao fim!!", // Subject line
+      text: `Obrigado por se cadastrar na nossa plataforma, clique no LINK para confirmar sua conta`, // plain text body,
+      react: FinalDeAnoEmail()
+    });
+  
+    if (error) {
+      console.log("Error sending message");
+      return console.error({ error });
+    }
+    console.log("Message sent");
+    console.log({ data });
+  }

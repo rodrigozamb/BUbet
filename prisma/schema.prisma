@@ -27,6 +27,7 @@ model User {
   notifications          UserNotification[]
   favorite_competitor    Competitor?        @relation(fields: [favorite_competitor_id], references: [id])
   badges                 Badge[]            @relation("BadgeToUser")
+  userSeasons            UserSeason[]
 
   @@map("users")
 }
@@ -182,6 +183,27 @@ model Badge {
   users       User[]       @relation("BadgeToUser")
 
   @@map("badges")
+}
+
+model Season {
+  id          String       @id @default(uuid())
+  name        String
+  created_at  DateTime     @default(now())
+  userSeasons UserSeason[]
+
+  @@map("seasons")
+}
+
+model UserSeason {
+  id       String @id @default(uuid())
+  userId   String
+  seasonId String
+  points   Int    @default(0)
+  position Int    @default(0)
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  season   Season @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+
+  @@map("user_seasons")
 }
 
 enum Role {

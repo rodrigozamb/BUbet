@@ -16,6 +16,9 @@ import { feedbacksRoutes } from "./controllers/feedbacks/routes";
 import { goldenBannersRoutes } from "./controllers/golden_banners/routes";
 import { notificationRoutes } from "./controllers/notifications/route";
 import { bagdesRoutes } from "./controllers/badges/routes";
+import { emailsRoutes } from "./controllers/emails/routes";
+import { userSeasonRoutes } from "./controllers/user_season/routes";
+import { seasonRoutes } from "./controllers/season/routes";
 
 require('aws-sdk/lib/maintenance_mode_message').suppress = true;
 export const app = fastify()
@@ -54,6 +57,11 @@ app.register(feedbacksRoutes)
 app.register(goldenBannersRoutes)
 app.register(notificationRoutes)
 app.register(bagdesRoutes)
+app.register(emailsRoutes)
+
+app.register(userSeasonRoutes)
+app.register(seasonRoutes)
+
 app.setErrorHandler((error, _, res)=>{
 
     if (error instanceof ZodError){
