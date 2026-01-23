@@ -30,6 +30,14 @@ export class PrismaEventResultsRepository implements EventsResultsRepository{
         const results = await prisma.eventResults.findMany({
             where:{
                 competitorId: competitor_id
+            },
+            include:{
+                event:{
+                    select:{
+                        name: true,
+                        banner: true
+                    }
+                }
             }
         })
 
