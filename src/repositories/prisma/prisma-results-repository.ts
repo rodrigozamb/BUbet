@@ -26,34 +26,34 @@ export class PrismaEventResultsRepository implements EventsResultsRepository{
     }
 
 
-    async getCompetitorStatistics(competitor_id: string): Promise<{ first: string; second: string; third: string; others: string; all:string }> {
+    async getCompetitorStatistics(competitor_id: string): Promise<{ first: EventResults[]; second: EventResults[]; third: EventResults[]; others: EventResults[]; all:string }> {
         const results = await prisma.eventResults.findMany({
             where:{
                 competitorId: competitor_id
             }
         })
 
-        var first = 0, second = 0, third = 0, others = 0
-    
+        var first:EventResults[] = [], second:EventResults[] = [], third:EventResults[] = [], others:EventResults[] = []
+        
         for(let i = 0 ; i < results.length ; i++){
             if (results[i].placing === "1"){
-                first+=1
+                first.push(results[i])
             }else
             if (results[i].placing === "2"){
-                second+=1
+                second.push(results[i])
             }else
             if (results[i].placing === "3"){
-                third+=1
+                third.push(results[i])
             }else
-                others+=1
+                others.push(results[i])
         }
 
         return {
-            first: first.toString(), 
-            second: second.toString(),
-            third: third.toString(), 
-            others: others.toString(),
-            all: (first+second+third+others).toString()
+            first, 
+            second,
+            third, 
+            others,
+            all: (first.length+second.length+third.length+others.length).toString()
         }
     }
     

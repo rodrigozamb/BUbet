@@ -14,7 +14,13 @@ export class PrismaJudgesRepository implements JudgesRepository{
                 id: judge_id
             },
             include:{
-                events: true
+                events: true,
+                socials: {
+                    select:{
+                        type: true,
+                        name: true
+                    }
+                }
             }
         })
     }

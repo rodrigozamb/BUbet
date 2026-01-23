@@ -1,14 +1,15 @@
 import { EventsResultsRepository } from "@/repositories/event-results-repository"
+import { EventResults } from "@prisma/client"
 
 interface getCompetitorStatisticsUseCaseRequest{
     competitor_id:string
 }
 
 interface getCompetitorStatisticsUseCaseResponse{
-    first: string
-    second: string
-    third: string
-    others: string
+    first: EventResults[]
+    second: EventResults[]
+    third: EventResults[]
+    others: EventResults[]
     all: string
 }
 

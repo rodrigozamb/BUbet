@@ -189,7 +189,13 @@ export class PrismaEventsRepository implements EventsRepository{
             include:{
                 judges:true,
                 competitors: true,
-                event_banner_types: true
+                event_banner_types: true,
+                socials: {
+                    select:{
+                        type: true,
+                        name: true
+                    }
+                }
             }
         })
     }

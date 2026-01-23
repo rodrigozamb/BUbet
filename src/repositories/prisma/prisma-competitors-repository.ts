@@ -40,8 +40,16 @@ export class PrismaCompetitorsRepository implements CompetitorsRepository{
     }
 
     async findById(id: string): Promise<Competitor | null> {
-        return await prisma.competitor.findUnique({
-            where:{id}
+        return await prisma.competitor.findFirst({
+            where:{id},
+            include:{
+                socials: {
+                    select:{
+                        type: true,
+                        name: true
+                    }
+                }
+            }
         })
     }
 

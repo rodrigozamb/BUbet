@@ -95,7 +95,13 @@ export class PrismaUsersRepository implements UsersRepository{
             include:{
                 badges: true,
                 bets: true,
-                favorite_competitor: true
+                favorite_competitor: true,
+                socials: {
+                    select:{
+                        type: true,
+                        name: true
+                    }
+                }
             }
         })
         if(user){
@@ -119,7 +125,13 @@ export class PrismaUsersRepository implements UsersRepository{
                         id:true
                     }
                 },
-                favorite_competitor:true
+                favorite_competitor:true,
+                socials: {
+                    select:{
+                        type: true,
+                        name: true
+                    }
+                }
             }
         })
         if(user){

@@ -28,6 +28,7 @@ model User {
   favorite_competitor    Competitor?        @relation(fields: [favorite_competitor_id], references: [id])
   badges                 Badge[]            @relation("BadgeToUser")
   userSeasons            UserSeason[]
+  socials                Socials[]
 
   @@map("users")
 }
@@ -48,6 +49,7 @@ model Event {
   event_banner_types BannerType[]   @relation("BannerTypeToEvent")
   competitors        Competitor[]   @relation("CompetitorToEvent")
   judges             Judge[]        @relation("EventToJudge")
+  socials            Socials[]
 
   @@map("events")
 }
@@ -63,6 +65,7 @@ model Competitor {
   users        User[]
   badges       Badge[]        @relation("BadgeToCompetitor")
   events       Event[]        @relation("CompetitorToEvent")
+  socials      Socials[]
 
   @@map("competitors")
 }
@@ -97,14 +100,15 @@ model Bets {
 }
 
 model Judge {
-  id          String  @id @default(uuid())
+  id          String    @id @default(uuid())
   description String
   avatar      String
   first_name  String
   last_name   String
   nickname    String
-  badges      Badge[] @relation("BadgeToJudge")
-  events      Event[] @relation("EventToJudge")
+  badges      Badge[]   @relation("BadgeToJudge")
+  events      Event[]   @relation("EventToJudge")
+  socials     Socials[]
 
   @@map("judges")
 }
@@ -206,7 +210,28 @@ model UserSeason {
   @@map("user_seasons")
 }
 
+model Socials {
+  id           String      @id @default(uuid())
+  type         SocialType
+  name         String
+  user         User?       @relation(fields: [userId], references: [id])
+  userId       String?
+  event        Event?      @relation(fields: [eventId], references: [id])
+  eventId      String?
+  competitor   Competitor? @relation(fields: [competitorId], references: [id])
+  competitorId String?
+  judge        Judge?      @relation(fields: [judgeId], references: [id])
+  judgeId      String?
+
+  @@map("socials")
+}
+
 enum Role {
   USER
   ADMIN
+}
+
+enum SocialType {
+  YOUTUBE
+  INSTAGRAM
 }

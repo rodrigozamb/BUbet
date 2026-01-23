@@ -9,5 +9,5 @@ export interface EventsResultsRepository{
     updateUserPagePoints():Promise<any>
     updateUsersPositions():Promise<any>
     findEventCompetitors(event_id: string): Promise<Competitor[] | null>
-    getCompetitorStatistics(competitor_id: string): Promise<{first: string,second: string,third: string,others: string, all: string}>
+    getCompetitorStatistics(competitor_id: string): Promise<{first: EventResults[],second: EventResults[],third: EventResults[],others: EventResults[], all: string}>
 }
