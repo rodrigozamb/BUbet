@@ -12,6 +12,7 @@ interface UpdateUserUseCaseRequest{
     email:string | undefined
     username: string  | undefined
     password: string  | undefined
+    favorite_competitor: string  | undefined
     profile_image: any | undefined
 }
 
@@ -25,7 +26,7 @@ export class UpdateUserUseCase{
         private usersRepository: UsersRepository, 
     ){}
     
-    async execute({email,name,username,password, user_id, profile_image}:UpdateUserUseCaseRequest): Promise<UpdateUserUseCaseResponse>{
+    async execute({email,name,username,password, user_id, profile_image, favorite_competitor}:UpdateUserUseCaseRequest): Promise<UpdateUserUseCaseResponse>{
 
         const userExists = await this.usersRepository.findById(user_id)
         if(!userExists){
@@ -63,11 +64,12 @@ export class UpdateUserUseCase{
                 user
             }
         }else{
-
-            const user = await this.usersRepository.update(user_id,{email,name,password_hash,username})
+        
+            const user = await this.usersRepository.update(user_id,{email,name,password_hash,favorite_competitor_id: favorite_competitor})
             return {
                 user
             }
+            
         }
 
     }

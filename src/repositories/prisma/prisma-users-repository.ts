@@ -74,7 +74,7 @@ export class PrismaUsersRepository implements UsersRepository{
         return pointed_ranks.concat(zero_ranks)
     }
     
-    async update(user_id: string, data: Prisma.UserUpdateInput): Promise<User> {
+    async update(user_id: string, data: Prisma.UserUncheckedUpdateInput): Promise<User> {
         return await prisma.user.update({
             data,
             where:{

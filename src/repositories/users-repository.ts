@@ -5,7 +5,7 @@ export interface UsersRepository{
     findSelfById(id:string) : Promise<User | null>
     findByEmail(email:string) : Promise<User | null>
     create(data: Prisma.UserCreateInput):Promise<User>
-    update(user_id: string, data: Prisma.UserUpdateInput): Promise<User>
+    update(user_id: string, data: Prisma.UserUncheckedUpdateInput): Promise<User>
     update_password(user_id: string, new_password: string): Promise<User>
     delete(user_id: string): Promise<User>
     confirmEmail(user_id: string):Promise<void>
