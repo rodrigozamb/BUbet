@@ -90,6 +90,7 @@ model Bets {
   bets        String[]
   created_at  DateTime       @default(now())
   points      Int            @default(0)
+  finished    Boolean        @default(false)
   id          String         @id @default(uuid())
   event       Event          @relation(fields: [eventId], references: [id], onDelete: Cascade)
   user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)

@@ -142,7 +142,6 @@ export class PrismaEventResultsRepository implements EventsResultsRepository{
         const promises:any = []
         all_users.forEach(async (user)=>{
             i+=1
-            console.log(user.name)
             return await prisma.user.update({
                 data:{
                     position: i
@@ -160,7 +159,7 @@ export class PrismaEventResultsRepository implements EventsResultsRepository{
 
     async updateUserPagePoints(){
         const users_dict: {[key: string]: number} =  {}
-        const all_bets = await prisma.bets.findMany({ })
+        const all_bets = await prisma.bets.findMany({ where:{ finished:false     } })
 
         all_bets.map((bet)=>{
             const user_id = bet.userId
