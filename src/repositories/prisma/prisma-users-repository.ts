@@ -131,6 +131,9 @@ export class PrismaUsersRepository implements UsersRepository{
                         type: true,
                         name: true
                     }
+                },  
+                cupons:{
+                    where:{betId:null}
                 }
             }
         })

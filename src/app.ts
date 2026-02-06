@@ -19,6 +19,7 @@ import { bagdesRoutes } from "./controllers/badges/routes";
 import { emailsRoutes } from "./controllers/emails/routes";
 import { userSeasonRoutes } from "./controllers/user_season/routes";
 import { seasonRoutes } from "./controllers/season/routes";
+import { cuponsRoutes } from "./controllers/cupons/routes";
 
 require('aws-sdk/lib/maintenance_mode_message').suppress = true;
 export const app = fastify()
@@ -57,6 +58,7 @@ app.register(feedbacksRoutes)
 app.register(goldenBannersRoutes)
 app.register(notificationRoutes)
 app.register(bagdesRoutes)
+app.register(cuponsRoutes)
 app.register(emailsRoutes)
 
 app.register(userSeasonRoutes)

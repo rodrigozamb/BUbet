@@ -29,6 +29,7 @@ model User {
   badges                 Badge[]            @relation("BadgeToUser")
   userSeasons            UserSeason[]
   socials                Socials[]
+  cupons                 Cupons[]
 
   @@map("users")
 }
@@ -95,6 +96,7 @@ model Bets {
   event       Event          @relation(fields: [eventId], references: [id], onDelete: Cascade)
   user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   estandartes GoldenBanner[]
+  cupons      Cupons?
 
   @@index([userId, eventId])
   @@map("bets")
@@ -225,6 +227,22 @@ model Socials {
   judgeId      String?
 
   @@map("socials")
+}
+
+model Cupons {
+  id    String @id @default(uuid())
+  value Int
+
+  created_at DateTime  @default(now())
+  used_at    DateTime?
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  bet   Bets?   @relation(fields: [betId], references: [id], onDelete: Cascade)
+  betId String? @unique
+
+  @@map("cupons")
 }
 
 enum Role {

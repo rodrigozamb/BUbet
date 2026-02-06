@@ -3,6 +3,7 @@ import { z } from "zod"
 import { InvalidCredentialsError } from "@/use-cases/errors/invalid-credentials-error"
 import { makeAuthenticateUseCase } from "@/use-cases/factories/make-authenticate-use-case"
 import { env } from "@/env"
+import { UserMustWaitCupomTimeoutError } from "@/use-cases/errors/user-must-wait-cupom-timeout-error"
 export async function authenticate(req: FastifyRequest, res: FastifyReply){
 
     const authenticateBodySchema = z.object({
@@ -56,6 +57,9 @@ export async function authenticate(req: FastifyRequest, res: FastifyReply){
 
     }catch(err){
         if(err instanceof InvalidCredentialsError){
+            return res.status(400).send({message: err.message}) 
+        }
+        if(err instanceof UserMustWaitCupomTimeoutError){
             return res.status(400).send({message: err.message}) 
         }
 
