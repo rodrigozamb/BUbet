@@ -146,6 +146,11 @@ export class PrismaEventsRepository implements EventsRepository{
                                 username: true,
                                 id: true
                             }
+                        },
+                        cupons:{
+                            select:{
+                                value: true
+                            }
                         }
                     }
                 }

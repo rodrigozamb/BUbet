@@ -29,6 +29,11 @@ export class PrismaBetsRepository implements BetsRepository{
                             }
                         }
                     }
+                },
+                cupons: {
+                    select:{
+                        value: true,
+                    }
                 }
             }
         })
