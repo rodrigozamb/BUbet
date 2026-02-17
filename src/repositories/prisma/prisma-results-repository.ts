@@ -85,8 +85,11 @@ export class PrismaEventResultsRepository implements EventsResultsRepository{
             where:{
                 eventId: event_id
             },
-            orderBy:{
-                userId:'asc'
+            include:{
+                cupons:true
+            },
+                orderBy:{
+                userId:'asc',
             }
         }) 
 
@@ -106,8 +109,11 @@ export class PrismaEventResultsRepository implements EventsResultsRepository{
                 }
             }) */
             
-            const points = this.calculatePoints(bet.bets, event_result)
-
+            let points = this.calculatePoints(bet.bets, event_result)
+            if ( bet.cupons ){
+                const extra_points = points * (bet.cupons.value/100)
+                points += extra_points
+            }
             return await prisma.bets.updateMany({
                 data:{
                     points
