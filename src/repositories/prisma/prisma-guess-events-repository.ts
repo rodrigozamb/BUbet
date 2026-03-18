@@ -65,8 +65,6 @@ export class PrismaGuessEventsRepository implements GuessEventsRepository{
 
     async listActiveGuessEvents(): Promise<GuessEvent[]> {
          return await prisma.guessEvent.findMany({
-            where:{
-            },
             orderBy:{
                 created_at: 'desc'
             }
