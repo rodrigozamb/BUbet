@@ -30,6 +30,7 @@ model User {
   userSeasons            UserSeason[]
   socials                Socials[]
   cupons                 Cupons[]
+  guessBets              GuessBets[]
 
   @@map("users")
 }
@@ -51,8 +52,56 @@ model Event {
   competitors        Competitor[]   @relation("CompetitorToEvent")
   judges             Judge[]        @relation("EventToJudge")
   socials            Socials[]
+  guessBets          GuessBets[]
 
   @@map("events")
+}
+
+model GuessEvent {
+  id               String             @id @default(uuid())
+  name             String
+  description      String
+  date             DateTime
+  points           Int                @default(10)
+  ends_at          DateTime
+  created_at       DateTime           @default(now())
+  bets             GuessBets[]
+  guess_options    String[]
+  custom_guess     Boolean            @default(false)
+  eventResults     EventResults[]
+  guessBetsResults GuessBetsResults[]
+
+  @@map("guess_events")
+}
+
+model GuessBets {
+  id           String      @id @default(uuid())
+  userId       String
+  guess        String
+  custom_guess String?
+  created_at   DateTime    @default(now())
+  points       Int         @default(0)
+  finished     Boolean     @default(false)
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  guessEvent   GuessEvent? @relation(fields: [guessEventId], references: [id])
+  guessEventId String?
+  event        Event?      @relation(fields: [eventId], references: [id])
+  eventId      String?
+
+  @@map("guess_bets")
+}
+
+model GuessBetsResults {
+  id String @id @default(uuid())
+
+  guess        String
+  custom_guess String?
+  created_at   DateTime @default(now())
+
+  guessEvent   GuessEvent? @relation(fields: [guessEventId], references: [id])
+  guessEventId String?
+
+  @@map("guess_bets_results")
 }
 
 model Competitor {
@@ -81,6 +130,8 @@ model EventResults {
   competitor   Competitor   @relation(fields: [competitorId], references: [id], onDelete: Cascade)
   event        Event        @relation(fields: [eventId], references: [id], onDelete: Cascade)
   estandartes  BannerType[] @relation("BannerTypeToEventResults")
+  guessEvent   GuessEvent?  @relation(fields: [guessEventId], references: [id])
+  guessEventId String?
 
   @@map("events_results")
 }
@@ -253,4 +304,9 @@ enum Role {
 enum SocialType {
   YOUTUBE
   INSTAGRAM
+}
+
+enum BetType {
+  RANKING
+  GUESS
 }

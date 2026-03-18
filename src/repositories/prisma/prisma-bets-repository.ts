@@ -1,4 +1,4 @@
-import { Bets, Event, Prisma, User } from "@prisma/client";
+import { Bets, Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { BetsRepository } from "../bets-repository";
 

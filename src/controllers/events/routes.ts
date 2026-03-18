@@ -16,6 +16,8 @@ import { listEventJudges } from "./listEventJudges"
 import { listEventGoldenBanners } from "./listEventGoldenBanners"
 import { listEventBannersTypes } from "./listEventBannersTypesController"
 import { addEventBanner } from "./addEventBannerController"
+import { listGuessEvents } from "./listGuessEventsController"
+import { getGuessEvent } from "./getGuessEventController"
 
 const storage = multer.memoryStorage(); // Storing the file in memory before uploading to S3
 const upload = multer({ storage });
@@ -27,6 +29,10 @@ export async function eventRoutes (app: FastifyInstance){
     app.post('/events',{onRequest:[verifyUserRole('ADMIN')], preHandler: upload.single('banner')}, createEvent)
 
     app.post('/event-banner/:event_id',{onRequest:[verifyUserRole('ADMIN')], preHandler: upload.single('banner')}, addEventBanner)
+
+    app.get('/guess-events', listGuessEvents)
+    app.get('/guess-events/:event_id', getGuessEvent)
+    
 
     app.get('/events', listEvents)
     app.get('/events/:eventId', getEvent)
