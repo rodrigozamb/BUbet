@@ -31,6 +31,8 @@ model User {
   socials                Socials[]
   cupons                 Cupons[]
   guessBets              GuessBets[]
+  userAlbumCards         UserAlbumCards[]
+  userAlbumPacks         UserAlbumPacks[]
 
   @@map("users")
 }
@@ -53,6 +55,7 @@ model Event {
   judges             Judge[]        @relation("EventToJudge")
   socials            Socials[]
   guessBets          GuessBets[]
+  albums             Album[]
 
   @@map("events")
 }
@@ -296,6 +299,95 @@ model Cupons {
   @@map("cupons")
 }
 
+model Album {
+  id          String       @id @default(uuid())
+  name        String
+  description String
+  pages       AlbumPage[]
+  albumCards  AlbumCards[]
+
+  event     Event?     @relation(fields: [event_id], references: [id])
+  event_id  String?
+  cardPacks CardPack[]
+
+  @@map("albums")
+}
+
+model AlbumPage {
+  id      String @id @default(uuid())
+  albumId String
+
+  type        AlbumPageType
+  cards       AlbumCards[]
+  description String?
+
+  album Album @relation(fields: [albumId], references: [id], onDelete: Cascade)
+
+  @@map("album_pages")
+}
+
+model AlbumCards {
+  id       String @id @default(uuid())
+  albumId  String
+  name     String
+  imageUrl String
+  naipe    String
+
+  album          Album            @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  album_page     AlbumPage?       @relation(fields: [album_page_id], references: [id])
+  album_page_id  String?
+  userAlbumCards UserAlbumCards[]
+
+  @@map("album_cards")
+}
+
+model UserAlbumCards {
+  id               String   @id @default(uuid())
+  user_id          String
+  album_card_id    String
+  obtained_at      DateTime @default(now())
+  last_obtained_at DateTime @default(now())
+
+  quantity Int @default(1)
+
+  user       User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  album_card AlbumCards @relation(fields: [album_card_id], references: [id], onDelete: Cascade)
+
+  @@map("user_album_cards")
+}
+
+model UserAlbumPacks {
+  id String @id @default(uuid())
+
+  user_id      String
+  card_pack_id String
+
+  obtained_at      DateTime @default(now())
+  last_obtained_at DateTime @default(now())
+
+  quantity Int @default(1)
+
+  user      User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  card_pack CardPack @relation(fields: [card_pack_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, card_pack_id])
+  @@map("user_album_packs")
+}
+
+model CardPack {
+  id          String  @id @default(uuid())
+  available   Boolean @default(true)
+  name        String
+  description String
+  image_url   String
+
+  album          Album            @relation(fields: [album_id], references: [id], onDelete: Cascade)
+  album_id       String
+  userAlbumPacks UserAlbumPacks[]
+
+  @@map("card_packs")
+}
+
 enum Role {
   USER
   ADMIN
@@ -309,4 +401,10 @@ enum SocialType {
 enum BetType {
   RANKING
   GUESS
+}
+
+enum AlbumPageType {
+  DESCRIPTION
+  IMAGESL
+  IMAGESR
 }
