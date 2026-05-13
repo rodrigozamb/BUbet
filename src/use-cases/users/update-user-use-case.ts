@@ -45,8 +45,7 @@ export class UpdateUserUseCase{
         if(password){
             password_hash = await hash(password, 6)
         }
-
-        if(profile_image.buffer){
+        if(profile_image && profile_image.buffer){
             const uploadParams = {
                 Bucket: env.AWS_BUCKET_NAME,       // Your S3 bucket name
                 Key: `users/user-${user_id}`,           // S3 object name (where to store in the bucket)
@@ -56,7 +55,7 @@ export class UpdateUserUseCase{
 
             // Uploading the file to S3
             const s3Image = await s3.upload(uploadParams).promise();
-            console.log('S3Image = ',s3Image)
+    
             const new_profile_image = s3Image
 
             const user = await this.usersRepository.update(user_id,{email,name,password_hash,username,profile_url: new_profile_image.Location})
@@ -64,7 +63,7 @@ export class UpdateUserUseCase{
                 user
             }
         }else{
-        
+
             const user = await this.usersRepository.update(user_id,{email,name,password_hash,favorite_competitor_id: favorite_competitor})
             return {
                 user

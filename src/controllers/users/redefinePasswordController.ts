@@ -29,7 +29,9 @@ export async function updateUserPassword(req: FastifyRequest, res: FastifyReply)
         password,
         email: undefined,
         name: undefined,
-        username: undefined
+        username: undefined,
+        favorite_competitor: undefined,
+        profile_image: undefined,
     })
 
     return res.status(201).send(user)
