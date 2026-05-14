@@ -64,6 +64,21 @@ export class PrismaUserAlbumCardsRepository implements UserAlbumCardsRepository{
         return await prisma.userAlbumCards.findMany({
             where:{
                 user_id: user_id
+            },
+            include:{
+                album_card: {
+                    select:{
+                        imageUrl: true,
+                        naipe: true,
+                        name: true,
+                        album:{
+                            select:{
+                                name: true,
+                            }
+                        }
+                    }
+                },
+                
             }
         })
     }

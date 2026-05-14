@@ -5,9 +5,9 @@ export async function listAllUserAlbumPacks(req: FastifyRequest, res: FastifyRep
 
     
     const listAllUserAlbumPacksUseCase = makeListAllUserAlbumPacksUseCase()
-    const { packs } = await listAllUserAlbumPacksUseCase.execute({
+    const { packs, cards } = await listAllUserAlbumPacksUseCase.execute({
         user_id: req.user.sub
     })
 
-    return res.status(201).send({ packs })
+    return res.status(201).send({ packs, cards })
 }
