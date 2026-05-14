@@ -38,13 +38,16 @@ export class PrismaUserAlbumPacksRepository implements UserAlbumPacksRepository{
         })
     }
 
-    async checkUserLastAlbumPack(user_id: string, pack_id: string, days: number = 1): Promise<boolean> {
+    async checkUserLastAlbumPack(user_id: string, pack_id: string, days: number = 1 ): Promise<boolean> {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        days = 0
         const albumPack = await prisma.userAlbumPacks.findFirst({
             where:{
                 user_id: user_id,
                 card_pack_id:pack_id,
                 last_obtained_at:{
-                    gte: new Date(Date.now() - days * 24 * 60 * 60 * 1000)
+                    gte: today
                 }
             }
         })
@@ -75,6 +78,8 @@ export class PrismaUserAlbumPacksRepository implements UserAlbumPacksRepository{
         })
     }
     async addPackToUser(user_id: string, pack_id: string, quantity: number=1): Promise<number> {
+        const brasiliaDate = new Date(Date.now() - 3 * 60 * 60 * 1000)
+
         const res = await prisma.userAlbumPacks.upsert({
             where: {
                 user_id_card_pack_id: {
@@ -86,14 +91,14 @@ export class PrismaUserAlbumPacksRepository implements UserAlbumPacksRepository{
                 quantity: {
                     increment: quantity
                 },
-                last_obtained_at: new Date()
+                last_obtained_at: brasiliaDate
             },
             create: {
                 user_id,
                 card_pack_id: pack_id,
                 quantity,
-                obtained_at: new Date(),
-                last_obtained_at: new Date()
+                obtained_at: brasiliaDate,
+                last_obtained_at: brasiliaDate
             }
         })
         console.log(res)
