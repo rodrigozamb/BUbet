@@ -316,6 +316,7 @@ model Album {
 model AlbumPage {
   id      String @id @default(uuid())
   albumId String
+  index   Int    @default(0)
 
   type        AlbumPageType
   cards       AlbumCards[]
@@ -332,6 +333,7 @@ model AlbumCards {
   name     String
   imageUrl String
   naipe    String
+  team     String @default("Desconhecido")
 
   album          Album            @relation(fields: [albumId], references: [id], onDelete: Cascade)
   album_page     AlbumPage?       @relation(fields: [album_page_id], references: [id])

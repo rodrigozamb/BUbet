@@ -21,7 +21,8 @@ import { userSeasonRoutes } from "./controllers/user_season/routes";
 import { seasonRoutes } from "./controllers/season/routes";
 import { cuponsRoutes } from "./controllers/cupons/routes";
 import { cardPacksRoutes } from "./controllers/card_packs/routes";
-//import { albumPacksRoutes } from "./controllers/album_cards/routes";
+import { albumPacksRoutes } from "./controllers/album_cards/routes";
+import { albumRoutes } from "./controllers/albums/routes";
 import { userAlbumPackRoutes } from "./controllers/user_album_packs/routes";
 
 require('aws-sdk/lib/maintenance_mode_message').suppress = true;
@@ -64,7 +65,8 @@ app.register(bagdesRoutes)
 app.register(cuponsRoutes)
 app.register(emailsRoutes)
 app.register(cardPacksRoutes)
-//app.register(albumPacksRoutes)
+app.register(albumPacksRoutes)
+app.register(albumRoutes)
 app.register(userAlbumPackRoutes)
 
 app.register(userSeasonRoutes)
