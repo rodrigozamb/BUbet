@@ -39,23 +39,19 @@ export class PrismaUserAlbumPacksRepository implements UserAlbumPacksRepository{
     }
 
     async checkUserLastAlbumPack(user_id: string, pack_id: string, days: number = 1 ): Promise<boolean> {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        days = 0
+        const twelveHoursAgo = new Date(Date.now() - 12 * 60 * 60 * 1000);
+
         const albumPack = await prisma.userAlbumPacks.findFirst({
             where:{
-                user_id: user_id,
-                card_pack_id:pack_id,
-                last_obtained_at:{
-                    gte: today
+                user_id,
+                card_pack_id: pack_id,
+                last_obtained_at: {
+                    gte: twelveHoursAgo
                 }
             }
         })
-        if(albumPack){
-            return true
-        }else{
-            return false
-        }
+
+        return Boolean(albumPack)
     }
 
     async findByAlbumId(album_id: string, user_id: string): Promise<UserAlbumPacks | null > {
