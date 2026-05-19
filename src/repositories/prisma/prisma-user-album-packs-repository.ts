@@ -54,6 +54,45 @@ export class PrismaUserAlbumPacksRepository implements UserAlbumPacksRepository{
         return Boolean(albumPack)
     }
 
+    async checkUserLastAlbumPackReturnTimeLeft(user_id: string, pack_id: string): Promise<string|null> {
+        const lastAlbumPack = await prisma.userAlbumPacks.findFirst({
+            where: {
+                user_id,
+                card_pack_id: pack_id
+            },
+            orderBy: {
+                last_obtained_at: 'desc'
+            }
+        })
+
+        if (!lastAlbumPack?.last_obtained_at) {
+            return null
+        }
+
+        const twelveHoursInMs = 12 * 60 * 60 * 1000
+        const elapsedMs = Date.now() - lastAlbumPack.last_obtained_at.getTime()
+
+        if (elapsedMs >= twelveHoursInMs) {
+            return null
+        }
+
+        const remainingMs = twelveHoursInMs - elapsedMs
+        const hours = Math.floor(remainingMs / (60 * 60 * 1000))
+        const minutes = Math.floor((remainingMs % (60 * 60 * 1000)) / (60 * 1000))
+        const seconds = Math.floor((remainingMs % (60 * 1000)) / 1000)
+
+        const parts = []
+        if (hours > 0) {
+            parts.push(`${hours}h`)
+        }
+        if (minutes > 0 || hours > 0) {
+            parts.push(`${minutes}m`)
+        }
+        parts.push(`${seconds}s`)
+
+        return parts.join(' ')
+    }
+
     async findByAlbumId(album_id: string, user_id: string): Promise<UserAlbumPacks | null > {
         return await prisma.userAlbumPacks.findFirst({
             where:{
