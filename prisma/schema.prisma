@@ -33,6 +33,8 @@ model User {
   guessBets              GuessBets[]
   userAlbumCards         UserAlbumCards[]
   userAlbumPacks         UserAlbumPacks[]
+  album_cards_offers     AlbumCardsTrades[] @relation("AlbumCardsTradesFromUser")
+  album_cards_trades     AlbumCardsTrades[] @relation("AlbumCardsTradesToUser")
 
   @@map("users")
 }
@@ -340,6 +342,9 @@ model AlbumCards {
   album_page_id  String?
   userAlbumCards UserAlbumCards[]
 
+  albumCardsOffers AlbumCardsTrades[] @relation("OfferedCard")
+  albumCardsTrades AlbumCardsTrades[] @relation("TradeCard")
+
   @@map("album_cards")
 }
 
@@ -388,6 +393,28 @@ model CardPack {
   userAlbumPacks UserAlbumPacks[]
 
   @@map("card_packs")
+}
+
+model AlbumCardsTrades {
+  id         String    @id @default(uuid())
+  created_at DateTime  @default(now())
+  traded_at  DateTime?
+
+  from_user    User   @relation("AlbumCardsTradesFromUser", fields: [from_user_id], references: [id], onDelete: Cascade)
+  from_user_id String
+
+  to_user    User?  @relation("AlbumCardsTradesToUser", fields: [to_user_id], references: [id], onDelete: Cascade)
+  to_user_id String?
+
+  offered_card     AlbumCards @relation("OfferedCard", fields: [offered_card_id], references: [id], onDelete: Cascade)
+  offered_card_id  String
+  offered_quantity Int        @default(1)
+
+  trade_card     AlbumCards @relation("TradeCard", fields: [trade_card_id], references: [id], onDelete: Cascade)
+  trade_card_id  String
+  trade_quantity Int        @default(1)
+
+  @@map("album_cards_trades")
 }
 
 enum Role {

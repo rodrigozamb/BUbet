@@ -136,7 +136,6 @@ export class PrismaUserAlbumPacksRepository implements UserAlbumPacksRepository{
                 last_obtained_at: brasiliaDate
             }
         })
-        console.log(res)
         return quantity
     }
     async listAllByUserId(user_id: string): Promise<UserAlbumPacks[]> {

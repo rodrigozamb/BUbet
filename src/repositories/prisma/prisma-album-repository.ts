@@ -4,6 +4,22 @@ import { prisma } from "@/lib/prisma";
 
 export class PrismaAlbumsRepository implements AlbumsRepository{
     
+    async getAlbumById(album_id: string): Promise<Album | null> {
+        return await prisma.album.findUnique({
+            where: {
+                id: album_id
+            },
+            include:{
+                event:true,
+                pages:{
+                    include:{
+                        cards:true
+                    }
+                }
+            }
+        });
+    }
+    
     async getAlbumByPackId(pack_id: string): Promise<Album> {
         const album =  await prisma.album.findFirst({
             where:{

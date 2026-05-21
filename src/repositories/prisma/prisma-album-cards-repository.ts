@@ -3,6 +3,19 @@ import { prisma } from "@/lib/prisma";
 import { AlbumCardsRepository } from "../album-cards-repository";
 
 export class PrismaAlbumCardsRepository implements AlbumCardsRepository{
+    
+    async listAll(): Promise<AlbumCards[]> {
+        return await prisma.albumCards.findMany({
+            
+            include:{
+                album:{
+                    select:{
+                        name:true,
+                    }
+                }
+            }
+        })
+    }
 
     async findByAlbumId(album_id: string, user_id: string): Promise<UserAlbumCards[]> {
         return await prisma.userAlbumCards.findMany({

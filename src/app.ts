@@ -69,6 +69,7 @@ app.register(albumPacksRoutes)
 app.register(albumRoutes)
 app.register(userAlbumPackRoutes)
 
+
 app.register(userSeasonRoutes)
 app.register(seasonRoutes)
 

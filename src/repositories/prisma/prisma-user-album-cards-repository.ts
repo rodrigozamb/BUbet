@@ -4,6 +4,15 @@ import { UserAlbumCardsRepository } from "../user-album-cards-repository";
 
 export class PrismaUserAlbumCardsRepository implements UserAlbumCardsRepository{
 
+    async findById(user_id: string, card_id: string): Promise<UserAlbumCards | null> {
+        return await prisma.userAlbumCards.findFirst({
+            where:{
+                user_id: user_id,
+                album_card_id: card_id,
+            }
+        })
+    }
+
     async checkUserLastAlbumCard(user_id: string, album_id: string, days: number = 1): Promise<boolean> {
         const albumCard = await prisma.userAlbumCards.findFirst({
             where:{
@@ -68,8 +77,10 @@ export class PrismaUserAlbumCardsRepository implements UserAlbumCardsRepository{
             include:{
                 album_card: {
                     select:{
+                        id: true,
                         imageUrl: true,
                         naipe: true,
+                        team: true,
                         name: true,
                         album:{
                             select:{
