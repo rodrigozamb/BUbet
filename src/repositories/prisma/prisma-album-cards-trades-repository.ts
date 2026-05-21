@@ -3,6 +3,14 @@ import { AlbumCardsTradesRepository } from "../album-cards-trades-repository";
 import { prisma } from "@/lib/prisma";
 
 export class PrismaAlbumCardsTradesRepository implements AlbumCardsTradesRepository{
+    async listUserCardsTrades(user_id: string): Promise<AlbumCardsTrades[]> {
+        return await prisma.albumCardsTrades.findMany({
+            where:{ 
+                from_user_id: user_id,
+                traded_at: null
+            }
+        })
+    }
     
     async deleteTrade(trade_id: string): Promise<void> {
         await prisma.albumCardsTrades.delete({

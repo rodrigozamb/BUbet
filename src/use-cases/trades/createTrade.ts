@@ -29,9 +29,12 @@ export class CreateTradeUseCase{
         if(trade_quantity > 5){
             throw new Error("Limite máximo de 5 cards por troca")
         }
-        console.log(from_user_id, offered_card_id)
+        const allUserTrades = await this.albunsCardsTradeRepository.listUserCardsTrades(from_user_id)
+        if(allUserTrades.length >= 5){
+            throw new Error("Você já tem 5 trocas em andamento")
+        }
         const userHasEnoughCards = await this.userCardsRepository.findById(from_user_id, offered_card_id)
-        console.log(userHasEnoughCards)
+        
         if(!userHasEnoughCards || userHasEnoughCards.quantity <= offered_quantity || userHasEnoughCards.quantity - offered_quantity <= 0){
             throw new Error("Você não tem a quantidade de cards necessária para realizar essa oferta")
         }

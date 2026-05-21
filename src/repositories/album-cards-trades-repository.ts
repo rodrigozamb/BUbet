@@ -5,5 +5,6 @@ export interface AlbumCardsTradesRepository{
     deleteTrade(trade_id: string): Promise<void>
     getById(trade_id:string): Promise<AlbumCardsTrades | null>
     listCardsTrades(): Promise<AlbumCardsTrades[]>
+    listUserCardsTrades(user_id: string): Promise<AlbumCardsTrades[]>
     acceptTrade(trade_id: string, to_user_id: string): Promise<void>
 }
