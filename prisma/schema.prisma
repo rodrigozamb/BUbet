@@ -336,6 +336,7 @@ model AlbumCards {
   imageUrl String
   naipe    String
   team     String @default("Desconhecido")
+  type     AlbumCardType @default(DEFAULT)
 
   album          Album            @relation(fields: [albumId], references: [id], onDelete: Cascade)
   album_page     AlbumPage?       @relation(fields: [album_page_id], references: [id])
@@ -387,6 +388,7 @@ model CardPack {
   name        String
   description String
   image_url   String
+  can_open    Boolean @default(false)
 
   album          Album            @relation(fields: [album_id], references: [id], onDelete: Cascade)
   album_id       String
@@ -436,4 +438,11 @@ enum AlbumPageType {
   DESCRIPTION
   IMAGESL
   IMAGESR
+  NOIMAGES
+}
+
+enum AlbumCardType {
+  SPECIAL
+  DEFAULT
+  HORIZONTAL
 }

@@ -36,6 +36,10 @@ export class PrismaAlbumCardsRepository implements AlbumCardsRepository{
             throw new Error("Invalid card pack.");
         }
 
+        if(!card_pack.can_open){
+            throw new Error("Esse pacote de cartas ainda não pode ser aberto. Fique atento às novidades!");
+        }
+
         const album = await prisma.album.findUnique({
             where:{
                 id: card_pack.album_id
