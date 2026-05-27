@@ -389,6 +389,7 @@ model CardPack {
   description String
   image_url   String
   can_open    Boolean @default(false)
+  created_at   DateTime @default(now())
 
   album          Album            @relation(fields: [album_id], references: [id], onDelete: Cascade)
   album_id       String
