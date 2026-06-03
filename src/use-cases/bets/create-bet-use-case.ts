@@ -42,6 +42,10 @@ export class CreateBetUseCase{
         if(!event){
             throw new ResourceNotFoundError()
         }
+
+        if(Date.now() > event.starts_at.getTime()){
+            throw new Error('Esse evento já começou, não é possível apostar mais nele.')
+        }
         
         const bet = await this.betsRepository.create({
             eventId: event_id,
