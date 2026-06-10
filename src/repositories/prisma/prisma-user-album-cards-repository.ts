@@ -82,6 +82,7 @@ export class PrismaUserAlbumCardsRepository implements UserAlbumCardsRepository{
                         naipe: true,
                         team: true,
                         name: true,
+                        type: true,
                         album:{
                             select:{
                                 name: true,

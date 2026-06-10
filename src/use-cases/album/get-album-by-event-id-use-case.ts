@@ -8,7 +8,7 @@ interface GetAlbumByEventIdUseCaseRequest{
 }
 
 interface GetAlbumByEventIdUseCaseResponse{
-    album: Album
+    album: any
 }
 
 
@@ -33,27 +33,42 @@ export class GetAlbumByEventIdUseCase {
                 ? res.album.pages
                     .slice()
                     .sort((a: any, b: any) => (a.index ?? 0) - (b.index ?? 0))
-                    .map((page: any) => ({
-                        ...page,
-                        cards: Array.isArray(page.cards)
-                            ? page.cards.map((card: any) => {
-                                const userCard = userCards[card.id]
-                                return userCard
-                                    ? {
-                                        name: userCard.album_card.name,
-                                        image_url: userCard.album_card.imageUrl,
-                                        naipe: userCard.album_card.naipe,
-                                        obtained_at: userCard.obtained_at
-                                    }
-                                    : {
-                                        name: "Cartinha Desconhecida",
-                                        image_url: "https://bubet-bucket.s3.sa-east-1.amazonaws.com/albuns/24171c2e-0744-4582-8da1-f7d1bb48f114/cards/bg-card-empty.png",
-                                        naipe: "Desconhecido",
-                                        obtained_at: "Desconhecido",
-                                    }
-                            })
-                            : []
-                    }))
+                    .map((page: any) => {
+                        const allCards = Array.isArray(page.cards) ? page.cards : []
+
+                        const mapCard = (card: any) => {
+                            const userCard = userCards[card.id]
+                            return userCard
+                                ? {
+                                    name: userCard.album_card.name,
+                                    image_url: userCard.album_card.imageUrl,
+                                    naipe: userCard.album_card.naipe,
+                                    type: userCard.album_card.type,
+                                    obtained_at: userCard.obtained_at
+                                }
+                                : {
+                                    name: "Cartinha Desconhecida",
+                                    image_url: `https://bubet-bucket.s3.sa-east-1.amazonaws.com/albuns/${res.album.id}/cards/bg-card-empty.png`,
+                                    naipe: "Desconhecido",
+                                    type: "DEFAULT",
+                                    obtained_at: "Desconhecido",
+                                }
+                        }
+
+                        const horizontal_cards = allCards
+                            .filter((c: any) => (c.type ?? '') === 'HORIZONTAL')
+                            .map(mapCard)
+
+                        const cards = allCards
+                            .filter((c: any) => (c.type ?? '') !== 'HORIZONTAL')
+                            .map(mapCard)
+
+                        return {
+                            ...page,
+                            cards,
+                            horizontal_cards
+                        }
+                    })
                 : []
         }
 

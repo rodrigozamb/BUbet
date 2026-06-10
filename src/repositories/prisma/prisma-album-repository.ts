@@ -71,6 +71,7 @@ export class PrismaAlbumsRepository implements AlbumsRepository{
                         imageUrl: true,
                         name: true,
                         naipe:true,
+                        type:true
                     }
                 }
             }
