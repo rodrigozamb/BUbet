@@ -53,9 +53,9 @@ export class GetAlbumByEventIdUseCase {
                                     obtained_at: userCard.obtained_at
                                 }
                                 : {
-                                    name: "Cartinha Desconhecida",
+                                    name: card.name ?? "Cartinha Desconhecida",
                                     image_url:card.type==="HORIZONTAL" ?  `https://bubet-bucket.s3.sa-east-1.amazonaws.com/albuns/${res.album.id}/cards/group-default.png` : `https://bubet-bucket.s3.sa-east-1.amazonaws.com/albuns/${res.album.id}/cards/bg-card-empty.png`,
-                                    naipe: "Desconhecido",
+                                    naipe: card.naipe ?? "Desconhecido",
                                     type: card.type,
                                     obtained_at: "Desconhecido",
                                 }
