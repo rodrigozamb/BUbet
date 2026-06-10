@@ -48,9 +48,9 @@ export class GetAlbumByEventIdUseCase {
                                 }
                                 : {
                                     name: "Cartinha Desconhecida",
-                                    image_url: `https://bubet-bucket.s3.sa-east-1.amazonaws.com/albuns/${res.album.id}/cards/bg-card-empty.png`,
+                                    image_url:card.type==="HORIZONTAL" ?  `https://bubet-bucket.s3.sa-east-1.amazonaws.com/albuns/${res.album.id}/cards/group-default.png` : `https://bubet-bucket.s3.sa-east-1.amazonaws.com/albuns/${res.album.id}/cards/bg-card-empty.png`,
                                     naipe: "Desconhecido",
-                                    type: "DEFAULT",
+                                    type: card.type,
                                     obtained_at: "Desconhecido",
                                 }
                         }
