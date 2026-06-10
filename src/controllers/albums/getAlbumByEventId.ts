@@ -9,7 +9,7 @@ export async function getAlbumByEventId(req: FastifyRequest, res: FastifyReply){
 
     const { event_id } = getAlbumByEventIdParamSchema.parse(req.params)
     const getAlbumByEventIdUseCase = makeGetAlbumByEventIDUseCase()
-    const { album, all_cards, user_cards } = await getAlbumByEventIdUseCase.execute({ event_id, user_id: req.user.sub })
+    const { album } = await getAlbumByEventIdUseCase.execute({ event_id, user_id: req.user.sub })
     
-    return res.status(200).send({ album, all_cards, user_cards })
+    return res.status(200).send({ album })
 }

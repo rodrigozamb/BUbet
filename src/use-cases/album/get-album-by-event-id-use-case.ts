@@ -8,9 +8,7 @@ interface GetAlbumByEventIdUseCaseRequest{
 }
 
 interface GetAlbumByEventIdUseCaseResponse{
-    album: any
-    all_cards: number
-    user_cards: number
+    album: any,
 }
 
 
@@ -81,9 +79,7 @@ export class GetAlbumByEventIdUseCase {
         }
 
         return {
-            album: albumWithUserCards,
-            all_cards: totalCardsInAlbum,
-            user_cards: userCardsCount,
+            album: albumWithUserCards
         }
     }
 
