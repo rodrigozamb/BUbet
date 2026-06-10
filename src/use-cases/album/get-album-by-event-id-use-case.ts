@@ -9,6 +9,8 @@ interface GetAlbumByEventIdUseCaseRequest{
 
 interface GetAlbumByEventIdUseCaseResponse{
     album: any
+    all_cards: number
+    user_cards: number
 }
 
 
@@ -26,6 +28,12 @@ export class GetAlbumByEventIdUseCase {
         res.cards.forEach(card => {
             userCards[card.album_card_id] = card
         })
+
+        const totalCardsInAlbum = Array.isArray(res.album.pages)
+            ? res.album.pages.flatMap((page: any) => Array.isArray(page.cards) ? page.cards : []).length
+            : 0
+
+        const userCardsCount = res.cards.length
 
         const albumWithUserCards = {
             ...res.album,
@@ -73,7 +81,9 @@ export class GetAlbumByEventIdUseCase {
         }
 
         return {
-            album: albumWithUserCards
+            album: albumWithUserCards,
+            all_cards: totalCardsInAlbum,
+            user_cards: userCardsCount,
         }
     }
 
